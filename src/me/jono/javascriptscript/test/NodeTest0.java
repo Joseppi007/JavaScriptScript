@@ -15,33 +15,33 @@ public class NodeTest0 {
     public static void main(String[] args) {
         Node adder = new Node("adder"){
             @Override
-            public Value run() {
+            public void run() {
                 System.out.println(getInputs());
                 System.out.println(getProperties());
                 int acc = 0;
                 for (Node input : getInputs()) {
-                    acc += (int)((IntValue)input.getValueAndRun()).getValue();
+                    input.runUnlessAlreadyRun();
+                    acc += (int)((IntValue)input.getOutputSockets().get("value").getValue()).getValue();
                 }
-                return new IntValue(acc);
+                getOutputSockets().set("value", new IntValue(acc));
             }
         };
         Node const0 = new Node("const0"){
             @Override
-            public Value run() {
-                return new IntValue(5);
+            public void run() {
+                getOutputSockets().set("value", new IntValue(9));
             }
         };
-        const0.getOutputSockets().set("value", new IntValue(5));
         Node const1 = new Node("const1"){
             @Override
-            public Value run() {
-                return new IntValue(3);
+            public void run() {
+                getOutputSockets().set("value", new IntValue(10));
             }
         };
-        const1.getOutputSockets().set("value", new IntValue(3));
         const0.linkTo("value", "value", adder);
         const1.linkTo("value", "value", adder);
         System.out.println(adder);
-        System.out.println(adder.getValueAndRun());
+        adder.runUnlessAlreadyRun();
+        System.out.println(adder.getOutputSockets().get("value"));
     }
 }

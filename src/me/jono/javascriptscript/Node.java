@@ -18,42 +18,42 @@ public abstract class Node {
     private final NodeOutputSockets outputs;
 
     /**
-     * The value is saved to prevent re-running the program when not required. It will change when the program is re-run
-     */
-    private Value savedValue;
-    /**
      * Each Node should have a unique name to make jssppsmm files easier to create. References to each Node can be done
      * with this name. If you want to store many Nodes, I would recommend a HashMap because of this.
      */
     private final String name;
 
+    private boolean alreadyRun;
+
     /**
-     * Gets the value of the Node, using inputs if the Node needs them.
-     * The value is saved in savedValue.
-     * @return The value of the Node
+     * This will run the Node to update the output sockets with the parameters unless alreadyRun is true.
+     * This will set alreadyRun to true. Nodes that want to achieve looping with control flow or something similar
+     * should set alreadyRun to false for its outputs, their outputs, and so on. This can be done with
+     * makeUnrunForward().
      */
-    public Value getValueAndRun() {
-        savedValue = run();
-        return savedValue;
+    public void runUnlessAlreadyRun() {
+        if (alreadyRun) return;
+        alreadyRun = true;
+        run();
     }
 
     /**
-     * Finds the value of the node as determined by its inputs
-     * @return The value of the node
+     * This will make this Node's alreadyRun false, as well as it's outputs' alreadyRuns, their outputs, and so on.
+     * If it hits a Node that hasn't alreadyRun, it will stop to avoid infinite loops.
      */
-    public abstract Value run();
+    protected void makeUnrunForward() {
+        if (alreadyRun)
+            for (Node out : getOutputNodes()) {
+                out.makeUnrunForward();
+            }
+        alreadyRun = false;
+    }
 
     /**
-     * Gets the savedValue, ignoring the input Nodes and everything because the program should not be run.
-     * @return The value of the Node
+     * Updates the {@link NodeOutputSockets outputs} using the parameters.
+     * This will call run for nodes that output to this node's inputs.
      */
-    public Value getSavedValue() {return savedValue;}
-
-    /**
-     * Replaces the savedValue with a new value.
-     * @param value The new value to be saved as savedValue.
-     */
-    private void setSavedValue(Value value) {this.savedValue = value;}
+    public abstract void run();
 
     /**
      * Gets the input nodes as an ArrayList
@@ -135,7 +135,6 @@ public abstract class Node {
         this.name = name;
         this.properties = new HashMap<>();
         this.outputs = new NodeOutputSockets(this);
-        this.savedValue = new ValueGroup();
     }
 
     /**
