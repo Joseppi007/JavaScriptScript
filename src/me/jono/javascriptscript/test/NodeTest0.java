@@ -32,12 +32,14 @@ public class NodeTest0 {
                 getOutputSockets().set("value", new IntValue(9));
             }
         };
+        const0.getOutputSockets().set("value", new IntValue(9));
         Node const1 = new Node("const1"){
             @Override
             public void run() {
                 getOutputSockets().set("value", new IntValue(10));
             }
         };
+        const1.getOutputSockets().set("value", new IntValue(10));
         const0.linkTo("value", "value", adder);
         const1.linkTo("value", "value", adder);
         System.out.println(adder);

@@ -58,4 +58,9 @@ public class NodeOutputSocketValue extends Value {
      */
     public ArrayList<Node> getNodesOutputTo() {return nodesOutputTo;}
 
+    @Override
+    public String toString() {
+        return value.toString();
+    }
+
 }
