@@ -21,7 +21,13 @@ public abstract class Node {
      * Each Node should have a unique name to make jssppsmm files easier to create. References to each Node can be done
      * with this name. If you want to store many Nodes, I would recommend a HashMap because of this.
      */
-    private final String name;
+    private String name;
+
+    /**
+     * Replaces the name
+     * @param name the new name
+     */
+    protected void setName(String name) {this.name = name;}
 
     private boolean alreadyRun;
 
@@ -47,6 +53,14 @@ public abstract class Node {
                 out.makeUnrunForward();
             }
         alreadyRun = false;
+    }
+
+    /**
+     * Set the alreadyRun to some boolean value
+     * @param alreadyRun what to set alreadyRun to--usually false to reset a program before running
+     */
+    protected void setAlreadyRun(boolean alreadyRun) {
+        this.alreadyRun = alreadyRun;
     }
 
     /**
@@ -131,10 +145,22 @@ public abstract class Node {
     @Override
     public String toString() {return "< " + getClass().getName() + " : " + this.name + " >";}
 
+    /**
+     * Makes a Node
+     * @param name the name of the node
+     */
     public Node(String name) {
         this.name = name;
         this.properties = new HashMap<>();
         this.outputs = new NodeOutputSockets(this);
+    }
+
+    /**
+     * Makes a Node with the name "node". You should change this name later because programs don't make sense with only
+     * one node, and only one node can be named "node".
+     */
+    public Node() {
+        this("node");
     }
 
     /**
