@@ -1,6 +1,7 @@
 package me.jono.javascriptscript;
 
 /**
+ * @author jono
  * A Value is just a super class for the value types that can be passed from Node to Node.
  */
 public abstract class Value {

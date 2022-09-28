@@ -15,30 +15,32 @@ public class NodeTest0 {
     public static void main(String[] args) {
         Node adder = new Node("adder"){
             @Override
-            public Object run() {
+            public Value run() {
+                System.out.println(getInputs());
+                System.out.println(getProperties());
                 int acc = 0;
                 for (Node input : getInputs()) {
-                    acc += (Integer)input.getValueAndRun();
+                    acc += (int)((IntValue)input.getValueAndRun()).getValue();
                 }
-                return acc;
+                return new IntValue(acc);
             }
         };
         Node const0 = new Node("const0"){
             @Override
-            public Object run() {
-                return 5;
+            public Value run() {
+                return new IntValue(5);
             }
         };
+        const0.getOutputSockets().set("value", new IntValue(5));
         Node const1 = new Node("const1"){
             @Override
-            public Object run() {
-                return 3;
+            public Value run() {
+                return new IntValue(3);
             }
         };
-        adder.getInputs().add(const0);
-        adder.getInputs().add(const1);
-        const0.getOutputs().add(adder);
-        const1.getOutputs().add(adder);
+        const1.getOutputSockets().set("value", new IntValue(3));
+        const0.linkTo("value", "value", adder);
+        const1.linkTo("value", "value", adder);
         System.out.println(adder);
         System.out.println(adder.getValueAndRun());
     }
