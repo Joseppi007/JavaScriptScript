@@ -46,5 +46,17 @@ public class Connection {
      */
     public Node getEnd() {return inputSocket.getNode();}
 
+    /**
+     * Transfers the value of the inputSocket to the outputSocket.
+     */
+    public void transfer() {
+        outputSocket.setValue(inputSocket.getValue());
+        getEnd().update(inputSocket.getName());
+    }
 
+    @Override
+    public String toString() {
+        return inputSocket.getNode().getName()+"("+inputSocket.getName()+")->"+
+                outputSocket.getNode().getName()+"("+outputSocket.getName()+")";
+    }
 }

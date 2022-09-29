@@ -117,6 +117,20 @@ public abstract class Node {
         return true;
     }
 
+    /**
+     * Lets the Node know that an input has been updated, and that it may want to {@link Node#sendOutputs sendOutputs}
+     * after changing them.
+     * @param inputUpdated
+     */
+    public abstract void update(String inputUpdated);
+
+    /**
+     * Go through each of the Connections and send the outputs to the Nodes that need them.
+     */
+    public void sendOutputs() {
+
+    }
+
     @Override
     public String toString() {
         return getName() + ":" + getClass().getCanonicalName();
@@ -130,12 +144,12 @@ public abstract class Node {
         StringBuilder a = new StringBuilder(toString());
         a.append("{");
         for (InputSocket input : inputs.values()) {
-            a.append(input+",");
+            a.append(input).append(",");
         }
         a.delete(a.length()-1, a.length());
         a.append("}{");
         for (OutputSocket output : outputs.values()) {
-            a.append(output+",");
+            a.append(output).append(",");
         }
         a.delete(a.length()-1, a.length());
         a.append("}");
