@@ -52,4 +52,9 @@ public abstract class Socket {
      * @param value the value to put in the socket
      */
     public void setValue(Value value) {this.value = value;}
+
+    @Override
+    public String toString() {
+        return getName()+":"+getValue();
+    }
 }

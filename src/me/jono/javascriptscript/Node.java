@@ -71,8 +71,74 @@ public abstract class Node {
         return null;
     }
 
+    /**
+     * Slaps a new InputSocket onto the Node--returns success status
+     * @param name the name of the new InputSocket
+     * @return the success status
+     */
+    public boolean newInput(String name) {
+        if (inputs.containsKey(name)) return false;
+        inputs.put(name, new InputSocket(this, name));
+        return true;
+    }
+
+    /**
+     * Slaps a new InputSocket onto the Node with a default value--returns success status
+     * @param name the name of the new InputSocket
+     * @param defaultValue the default value of the Socket
+     * @return the success status
+     */
+    public boolean newInput(String name, Value defaultValue) {
+        if (inputs.containsKey(name)) return false;
+        inputs.put(name, new InputSocket(this, name, defaultValue));
+        return true;
+    }
+
+    /**
+     * Slaps a new OutputSocket onto the Node--returns success status
+     * @param name the name of the OutputSocket
+     * @return the success status
+     */
+    protected boolean newOutput(String name) {
+        if (outputs.containsKey(name)) return false;
+        outputs.put(name, new OutputSocket(this, name));
+        return true;
+    }
+
+    /**
+     * Slaps a new OutputSocket onto the Node with a default value--returns success status
+     * @param name the name of the OutputSocket
+     * @param defaultValue the default value of the Socket
+     * @return the success status
+     */
+    protected boolean newOutput(String name, Value defaultValue) {
+        if (outputs.containsKey(name)) return false;
+        outputs.put(name, new OutputSocket(this, name, defaultValue));
+        return true;
+    }
+
     @Override
     public String toString() {
         return getName() + ":" + getClass().getCanonicalName();
+    }
+
+    /**
+     * Returns a string representation of the object.
+     * @return a string representation of the object.
+     */
+    public String toDetailedString() {
+        StringBuilder a = new StringBuilder(toString());
+        a.append("{");
+        for (InputSocket input : inputs.values()) {
+            a.append(input+",");
+        }
+        a.delete(a.length()-1, a.length());
+        a.append("}{");
+        for (OutputSocket output : outputs.values()) {
+            a.append(output+",");
+        }
+        a.delete(a.length()-1, a.length());
+        a.append("}");
+        return a.toString();
     }
 }
