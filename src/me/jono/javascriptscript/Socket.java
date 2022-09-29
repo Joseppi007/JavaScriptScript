@@ -6,14 +6,27 @@ package me.jono.javascriptscript;
  * {@link InputSocket InputSockets} take data in, and {@link OutputSocket OutputSockets} spit data out.
  */
 public abstract class Socket {
-    private Node node;
+    private final Node node;
+    private final String name;
+    private Value value;
 
     /**
      * Creates a Socket
      * @param node The Node the Socket is attached to
+     * @param initialValue A Value to start out with as a default
      */
-    public Socket(Node node) {
+    public Socket(Node node, String name, Value initialValue) {
         this.node = node;
+        this.name = name;
+        this.value = initialValue;
+    }
+
+    /**
+     * Creates a Socket with an empty MultiValue as an initial value
+     * @param node The Node the Socket is attached to
+     */
+    public Socket(Node node, String name) {
+        this(node, name, new MultiValue());
     }
 
     /**
@@ -23,8 +36,20 @@ public abstract class Socket {
     public Node getNode() {return node;}
 
     /**
-     * Changes which Node this Socket is attached to
-     * @param node the Node to attach this to
+     * Gets the name of the socket
+     * @return the name of the socket
      */
-    private void setNode(Node node) {this.node = node;}
+    public String getName() {return name;}
+
+    /**
+     * Gets the value stored in the socket
+     * @return the value
+     */
+    public Value getValue() {return value;}
+
+    /**
+     * Changes the value stored in the socket
+     * @param value the value to put in the socket
+     */
+    public void setValue(Value value) {this.value = value;}
 }

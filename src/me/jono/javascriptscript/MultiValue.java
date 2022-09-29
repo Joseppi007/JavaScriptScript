@@ -16,6 +16,11 @@ public class MultiValue extends Value implements Iterable<Value> {
         super(value);
     }
 
+    /**
+     * Creates an empty MultiValue
+     */
+    public MultiValue() {super(new ArrayList<Value>());}
+
     @Override
     public Iterator<Value> iterator() {
         return new Iterator<Value>() {

@@ -1,5 +1,7 @@
 package me.jono.javascriptscript;
 
+import java.util.HashMap;
+
 /**
  * @author jono
  * To understand what a Node is, let me explain how the language JavaScriptScript++#--.jssppsmm works. If you've ever
@@ -12,5 +14,65 @@ package me.jono.javascriptscript;
  * serious for me.
  */
 public abstract class Node {
+    private HashMap<String, InputSocket> inputs;
+    private HashMap<String, OutputSocket> outputs;
+    private String name; // Must be UNIQUE
 
+
+    /**
+     * Gets all the input sockets
+     * @return the input sockets
+     */
+    public HashMap<String, InputSocket> getInputs() {return inputs;}
+
+    /**
+     * Gets all the output sockets
+     * @return the output sockets
+     */
+    public HashMap<String, OutputSocket> getOutputs() {return outputs;}
+
+    /**
+     * Returns the name of the Node.
+     * @return the name
+     */
+    public String getName() {return name;}
+
+    /**
+     * Sets the name to something new--make sure the name is unique
+     * @param name the new name
+     */
+    public void setName(String name) {this.name = name;}
+
+    /**
+     * Gets the input socket with the provided name and creates one if one doesn't exist already. I allow creating new
+     * inputs because this could be useful, and if it isn't, it feels like the kind of thing that would be in
+     * JavaScriptScript++#--.jssppsmm anyways.
+     * @param name The name of the InputSocket
+     * @return The InputSocket with the name or a new InputSocket with the name
+     */
+    public InputSocket getInput(String name) {
+        if (inputs.containsKey(name)) {
+            return inputs.get(name);
+        }
+        InputSocket created = new InputSocket(this, name);
+        inputs.put(name, created);
+        return created;
+    }
+
+    /**
+     * Gets the output socket with the provided name and returns null if it doesn't exist
+     * @param name The name of the OutputSocket
+     * @return The OutputSocket with the name or null
+     */
+    public OutputSocket getOutput(String name) {
+        if (outputs.containsKey(name)) {
+            return outputs.get(name);
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + ":" + getClass().getCanonicalName();
+    }
 }
