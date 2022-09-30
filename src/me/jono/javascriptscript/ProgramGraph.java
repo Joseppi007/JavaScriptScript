@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class ProgramGraph extends Value {
     public static final int UNIQUE_NAME_LENGTH = 10;
-    public static final Scanner input = new Scanner(System.in);
+
     private ToDoList toDoList;
 
     /**
@@ -35,12 +35,11 @@ public class ProgramGraph extends Value {
                         NumberValue.updateContexts(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
                     }
                     case ("NODE") -> {
-                        switch (tokens[1]) {
-                            case ("+"), ("ADD") -> addNode(new Add(tokens[2]));
-                            case ("-"), ("SUBTRACT") -> addNode(new Subtract(tokens[2]));
-                            case ("INPUT_NUMBER") -> addNode(new InputNumber(tokens[2], input));
-                            case ("PRINT") -> addNode(new Print(tokens[2]));
-                        }
+                        try {
+                            String[] args = new String[tokens.length-1];
+                            System.arraycopy(tokens, 1, args, 0, args.length);
+                            addNode(NodeCreator.makeNode(args));
+                        } catch(ClassNotFoundException cnfe) {cnfe.printStackTrace();}
                     }
                     case ("CONNECTION") -> {
                         if (tokens.length > 5) {
