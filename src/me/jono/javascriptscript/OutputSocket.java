@@ -34,6 +34,15 @@ public class OutputSocket extends Socket {
     public ArrayList<Connection> getOutgoingConnections() {return outgoingConnections;}
 
     /**
+     * Creates and adds a new Connection to the list of Connections coming out of this socket
+     * @param inputSocket The Socket to send data to
+     * @param priority The priority of the connection
+     */
+    public void addConnection(InputSocket inputSocket, int priority) {
+        outgoingConnections.add(new Connection(this, inputSocket, priority));
+    }
+
+    /**
      * Appends the connections to the provided ToDoList
      * @param toDoList the ToDoList to add the connections to
      * @return the success status

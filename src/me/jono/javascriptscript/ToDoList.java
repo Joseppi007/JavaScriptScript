@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * recursion to make infinite loops possible.
  */
 public class ToDoList {
-    private ArrayList<Connection> connections;
+    private final ArrayList<Connection> connections;
     public enum Ordering{
         STACK,
         QUE

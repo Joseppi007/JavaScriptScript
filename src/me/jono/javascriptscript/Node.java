@@ -18,6 +18,15 @@ public abstract class Node {
     private HashMap<String, OutputSocket> outputs;
     private String name; // Must be UNIQUE
 
+    /**
+     * Creates a new Node
+     * @param name The unique name of the Node
+     */
+    public Node(String name) {
+        this.name = name;
+        inputs = new HashMap<>();
+        outputs = new HashMap<>();
+    }
 
     /**
      * Gets all the input sockets
