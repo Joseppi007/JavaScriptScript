@@ -28,7 +28,11 @@ public class ToDoList {
      * Do everything in the list, adding to it as required, and halting once there's nothing to do.
      */
     public void doList() {
-
+        while (connections.size() > 0) {
+            Connection connection = next();
+            connection.transfer();
+            connection.getEnd().update(connection.getInputSocket().getName(), this);
+        }
     }
 
     /**
@@ -49,5 +53,16 @@ public class ToDoList {
      */
     public void addOutputSocketConnections(OutputSocket outputSocket) {
         outputSocket.addConnectionsToToDoList(this);
+    }
+
+    /**
+     * Gets the next connection and removes it.
+     * @return the next connection
+     */
+    private Connection next() {
+        if (ordering == Ordering.QUE) {
+            return connections.remove(0);
+        }
+        return connections.remove(connections.size()-1);
     }
 }

@@ -122,13 +122,15 @@ public abstract class Node {
      * after changing them.
      * @param inputUpdated
      */
-    public abstract void update(String inputUpdated);
+    public abstract void update(String inputUpdated, ToDoList toDoList);
 
     /**
-     * Go through each of the Connections and send the outputs to the Nodes that need them.
+     * Go through each of the Connections and add them to the ToDoList.
      */
-    public void sendOutputs() {
-
+    public void sendOutputs(ToDoList toDoList) {
+        for (OutputSocket socket : outputs.values()) {
+            socket.addConnectionsToToDoList(toDoList);
+        }
     }
 
     @Override
