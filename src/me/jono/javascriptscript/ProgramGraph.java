@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class ProgramGraph extends Value {
     public static final int UNIQUE_NAME_LENGTH = 10;
     private ToDoList toDoList;
+
     /**
      * Creates an empty program
      */
@@ -22,12 +23,13 @@ public class ProgramGraph extends Value {
      * @param name The name of the Node to run
      */
     public void runNode(String name) {
-        prepareNodeToBeRun(name);
+        //prepareNodeToBeRun(name);
+        getValue().get(name).update("", toDoList);
         toDoList.doList();
     }
 
     /**
-     * Puts a Node's connections onto the ToDoList
+     * Puts a Node's connections onto the ToDoList--Should probably delete this because it's useless
      * @param name the Node to use
      */
     private void prepareNodeToBeRun(String name) {
@@ -41,7 +43,8 @@ public class ProgramGraph extends Value {
      */
     public void runNode(String... names) {
         for (String name : names) {
-            prepareNodeToBeRun(name);
+            //prepareNodeToBeRun(name);
+            getValue().get(name).update("", toDoList);
         }
         toDoList.doList();
     }
@@ -119,6 +122,19 @@ public class ProgramGraph extends Value {
      */
     public boolean makeConnection(String start, String out, String in, String end) {
         return makeConnection(start, out, in, end, Connection.DEFAULT_PRIORITY);
+    }
+
+    /**
+     * Gets the node with the provided name
+     * @param name the name
+     * @return the node
+     */
+    public Node getNode(String name) {
+        try {
+            return getValue().get(name);
+        } catch (Exception e) {
+            throw e; // Should handle this at some point
+        }
     }
 
 }
