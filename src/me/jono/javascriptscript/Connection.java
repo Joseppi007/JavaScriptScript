@@ -11,6 +11,27 @@ package me.jono.javascriptscript;
 public class Connection {
     private OutputSocket outputSocket;
     private InputSocket inputSocket;
+    /**
+     * The priority only compares itself to the priorities of other Connections from the same OutputSocket. This is done
+     * because Connections are added to the ToDoList in the order of creation otherwise, and having to delete and
+     * recreate Connections would suck.
+     */
+    private int priority; // The priority only compares to other Connections from the same
+    public static final int DEFAULT_PRIORITY = 3;
+    private boolean enabled;
+    public static final boolean DEFAULT_ENABLEDNESS = true;
+
+    /**
+     * Creates a new Connection
+     * @param outputSocket Where the data comes from
+     * @param inputSocket Where the data goes
+     */
+    public Connection(OutputSocket outputSocket, InputSocket inputSocket, int priority) {
+        this.outputSocket = outputSocket;
+        this.inputSocket = inputSocket;
+        this.priority = priority;
+        this.enabled = DEFAULT_ENABLEDNESS;
+    }
 
     /**
      * Creates a new Connection
@@ -18,8 +39,7 @@ public class Connection {
      * @param inputSocket Where the data goes
      */
     public Connection(OutputSocket outputSocket, InputSocket inputSocket) {
-        this.outputSocket = outputSocket;
-        this.inputSocket = inputSocket;
+        this(outputSocket, inputSocket, DEFAULT_PRIORITY);
     }
 
     /**
@@ -51,8 +71,21 @@ public class Connection {
      */
     public void transfer() {
         outputSocket.setValue(inputSocket.getValue());
-        getEnd().update(inputSocket.getName());
+        //getEnd().update(inputSocket.getName());
     }
+
+    /**
+     * Gets the priority<br/>
+     * The higher it is, the sooner it should be handled
+     * @return the priority
+     */
+    public int getPriority() {return priority;}
+
+    /**
+     * Updates the priority
+     * @param priority the new priority
+     */
+    public void setPriority(int priority) {this.priority = priority;}
 
     @Override
     public String toString() {
