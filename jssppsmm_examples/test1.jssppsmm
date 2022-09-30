@@ -1,0 +1,15 @@
+ORDERING STACK
+NUMBER_LENGTH 200 20
+
+NODE INPUT_NUMBER start_in0
+NODE INPUT_NUMBER start_in1
+NODE ADD a
+NODE SUBTRACT s
+NODE PRINT p
+
+CONNECTION start_in0 value value0 a
+CONNECTION start_in1 value value1 a
+CONNECTION start_in0 value value0 s
+CONNECTION start_in1 value value1 s
+CONNECTION a value value p
+CONNECTION s value value p

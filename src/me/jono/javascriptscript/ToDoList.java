@@ -13,7 +13,13 @@ public class ToDoList {
         STACK,
         QUE
     }
-    private final Ordering ordering;
+    private Ordering ordering;
+
+    /**
+     * Sets the ordering
+     * @param ordering the ordering
+     */
+    protected void setOrdering(Ordering ordering) {this.ordering = ordering;}
 
     /**
      * Creates a ToDoList

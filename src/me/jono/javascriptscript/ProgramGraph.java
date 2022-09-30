@@ -1,9 +1,15 @@
 package me.jono.javascriptscript;
 
+import me.jono.javascriptscript.nodes.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class ProgramGraph extends Value {
     public static final int UNIQUE_NAME_LENGTH = 10;
+    public static final Scanner input = new Scanner(System.in);
     private ToDoList toDoList;
 
     /**
@@ -12,6 +18,42 @@ public class ProgramGraph extends Value {
     public ProgramGraph(ToDoList.Ordering ordering) {
         super(new HashMap<String, Node>());
         toDoList = new ToDoList(ordering);
+    }
+
+    public ProgramGraph(File file) {
+        this(ToDoList.Ordering.STACK);
+        try {
+            Scanner fileScanner = new Scanner(file);
+            while (fileScanner.hasNext()) {
+                String line = fileScanner.nextLine();
+                String[] tokens = line.split(" ");
+                switch (tokens[0]) {
+                    case ("ORDERING") -> {
+                        toDoList.setOrdering(ToDoList.Ordering.valueOf(tokens[1]));
+                    }
+                    case ("NUMBER_LENGTH") -> {
+                        NumberValue.updateContexts(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+                    }
+                    case ("NODE") -> {
+                        switch (tokens[1]) {
+                            case ("+"), ("ADD") -> addNode(new Add(tokens[2]));
+                            case ("-"), ("SUBTRACT") -> addNode(new Subtract(tokens[2]));
+                            case ("INPUT_NUMBER") -> addNode(new InputNumber(tokens[2], input));
+                            case ("PRINT") -> addNode(new Print(tokens[2]));
+                        }
+                    }
+                    case ("CONNECTION") -> {
+                        if (tokens.length > 5) {
+                            makeConnection(tokens[1], tokens[2], tokens[3], tokens[4], Integer.parseInt(tokens[5]));
+                        } else {
+                            makeConnection(tokens[1], tokens[2], tokens[3], tokens[4]);
+                        }
+                    }
+                }
+            }
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
     }
 
     @Override
@@ -135,6 +177,15 @@ public class ProgramGraph extends Value {
         } catch (Exception e) {
             throw e; // Should handle this at some point
         }
+    }
+
+    /**
+     * Lists all the Nodes
+     * @return the Nodes
+     */
+    public Node[] listNodes() {
+        Node[] nodes = {};
+        return getValue().values().toArray(nodes);
     }
 
 }
