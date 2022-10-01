@@ -57,4 +57,9 @@ public class NumberValue extends Value {
     @Override
     public BigDecimal getValue() {return ((BigDecimal)super.getValue()).divide(BigDecimal.ONE, displayContext);}
 
+    @Override
+    public boolean isTruthy() {
+        return getValue().compareTo(BigDecimal.ZERO) < 1;
+    }
+
 }

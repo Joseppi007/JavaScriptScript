@@ -17,4 +17,9 @@ public class TextValue extends Value {
     @Override
     public String getValue() {return (String)super.getValue();}
 
+    @Override
+    public boolean isTruthy() {
+        return getValue().length() > 0;
+    }
+
 }

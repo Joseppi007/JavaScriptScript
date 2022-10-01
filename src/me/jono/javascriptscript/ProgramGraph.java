@@ -263,4 +263,9 @@ public class ProgramGraph extends Value {
         return getValue().values().toArray(nodes);
     }
 
+    @Override
+    public boolean isTruthy() {
+        return true;
+    }
+
 }

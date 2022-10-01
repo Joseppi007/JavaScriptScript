@@ -41,4 +41,10 @@ public class MultiValue extends Value implements Iterable<Value> {
 
     @Override
     public ArrayList<Value> getValue() {return (ArrayList<Value>)super.getValue();}
+
+    @Override
+    public boolean isTruthy() {
+        return getValue().size() > 0;
+    }
+
 }

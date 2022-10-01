@@ -34,4 +34,10 @@ public abstract class Value {
         return value.toString();
     }
 
+    /**
+     * Gets weather or not the value is truthy
+     * @return the truthiness
+     */
+    public abstract boolean isTruthy();
+
 }
