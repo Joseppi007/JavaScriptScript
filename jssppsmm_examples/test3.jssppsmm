@@ -1,0 +1,13 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE InputNumber start_in
+NODE Divide d
+NODE Print p
+
+CONNECTION start_in value value1 d
+CONNECTION d value value p
+
+INPUT d value0 NUMBER:1
+INPUT d value1 NUMBER:0
+OUTPUT d value NUMBER:0

@@ -31,11 +31,11 @@ public class NumberValue extends Value {
      * Gets the calculation MathContext
      * @return the calculation MathContext
      */
-    public MathContext getCalculationContext() {return calculationContext;}
+    public static MathContext getCalculationContext() {return calculationContext;}
 
     /**
      * Gets the display MathContext
-     * @return
+     * @return the display MathContext
      */
     public MathContext getDisplayContext() {return displayContext;}
 
