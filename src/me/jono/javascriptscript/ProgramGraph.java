@@ -4,6 +4,8 @@ import me.jono.javascriptscript.nodes.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -62,6 +64,71 @@ public class ProgramGraph extends Value {
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         }
+    }
+
+    /**
+     * Save the program to a file
+     * @param file The file to write to
+     */
+    public void writeToFile(File file) throws IOException {
+        file.createNewFile();
+        FileWriter fileWriter = new FileWriter(file);
+
+        fileWriter.write("ORDERING " + ((toDoList.getOrdering().equals(ToDoList.Ordering.QUE)) ? ("QUE") : ("STACK")) +
+                "\n");
+        fileWriter.append("NUMBER_LENGTH " + NumberValue.getDigits() + " " + NumberValue.getExtraDigits() + "\n\n");
+
+        for (Node node : listNodes()) {
+            fileWriter.append("NODE ");
+            fileWriter.append(NodeCreator.unmakeNode(node));
+            fileWriter.append('\n');
+        }
+
+        fileWriter.append('\n');
+
+        for (Node node : listNodes()) {
+            for (OutputSocket socket : node.getOutputs().values()) {
+                for (Connection connection : socket.getOutgoingConnections()) {
+                    fileWriter.append("CONNECTION ");
+                    fileWriter.append(node.getName());
+                    fileWriter.append(" ");
+                    fileWriter.append(socket.getName());
+                    fileWriter.append(" ");
+                    fileWriter.append(connection.getInputSocket().getName());
+                    fileWriter.append(" ");
+                    fileWriter.append(connection.getInputSocket().getNode().getName());
+                    fileWriter.append(" "+connection.getPriority());
+                    fileWriter.append('\n');
+                }
+            }
+        }
+
+        fileWriter.append('\n');
+
+        for (Node node : listNodes()) {
+            for (InputSocket socket : node.getInputs().values()) {
+                fileWriter.append("INPUT ");
+                fileWriter.append(node.getName());
+                fileWriter.append(" ");
+                fileWriter.append(socket.getName());
+                fileWriter.append(" ");
+                fileWriter.append(ValueCreator.unmakeValue(socket.getValue()));
+                fileWriter.append("\n");
+            }
+        }
+        for (Node node : listNodes()) {
+            for (OutputSocket socket : node.getOutputs().values()) {
+                fileWriter.append("OUTPUT ");
+                fileWriter.append(node.getName());
+                fileWriter.append(" ");
+                fileWriter.append(socket.getName());
+                fileWriter.append(" ");
+                fileWriter.append(ValueCreator.unmakeValue(socket.getValue()));
+                fileWriter.append("\n");
+            }
+        }
+
+        fileWriter.close();
     }
 
     @Override

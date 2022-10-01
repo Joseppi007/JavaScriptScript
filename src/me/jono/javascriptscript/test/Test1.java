@@ -6,6 +6,7 @@ import me.jono.javascriptscript.nodes.InputNumber;
 import me.jono.javascriptscript.nodes.Print;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,5 +28,10 @@ public class Test1 {
         String[] formatter = {};
         System.out.println("===Running File===\n");
         programGraph.runNode(nodesToRun.toArray(formatter));
+        try {
+            programGraph.writeToFile(new File(args[1]));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 }
