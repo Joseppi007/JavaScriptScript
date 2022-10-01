@@ -151,7 +151,7 @@ public class FormatTools {
      * @param string The String to unescape
      * @return The unescaped String
      */
-    public static String CustomStringUnescape(String string) {
+    public static String customStringUnescape(String string) {
         StringBuilder r = new StringBuilder();
         boolean escape = false;
         for (int i = 0; i < string.length(); i++) {

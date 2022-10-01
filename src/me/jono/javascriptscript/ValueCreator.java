@@ -36,7 +36,7 @@ public class ValueCreator {
                 return new NumberValue(new BigDecimal(data));
             }
             case ("TEXT"), ("\"") -> {
-                return new TextValue(FormatTools.CustomStringUnescape(data.substring(1,data.length()-1)));
+                return new TextValue(FormatTools.customStringUnescape(data.substring(1,data.length()-1)));
             }
             case ("MULTI"), ("()") -> {
                 ArrayList<Value> values = new ArrayList<>();
