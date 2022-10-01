@@ -6,13 +6,13 @@ import me.jono.javascriptscript.*;
  * @author jono
  * Groups together Values into a MultiValue
  */
-public class GroupConcat extends Node {
+public class MultiConcat extends Node {
 
     /**
      * Creates the Node
      * @param name The unique name of the Node
      */
-    public GroupConcat(String name) {
+    public MultiConcat(String name) {
         super(name);
         newInput("value0");
         newInput("value1");

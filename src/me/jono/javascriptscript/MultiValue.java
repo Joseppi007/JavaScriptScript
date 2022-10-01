@@ -47,4 +47,16 @@ public class MultiValue extends Value implements Iterable<Value> {
         return getValue().size() > 0;
     }
 
+    /**
+     * Gets the value at the index<br/>
+     * An empty MultiValue if there isn't anything to return
+     * @param index the index
+     * @return the value
+     */
+    public Value getValue(int index) {
+        if (index >= 0 && index < getValue().size()) {
+            return getValue().get(index);
+        }
+        return new MultiValue();
+    }
 }

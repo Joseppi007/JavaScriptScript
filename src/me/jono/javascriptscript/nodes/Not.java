@@ -26,8 +26,8 @@ public class Not extends Node {
     public void update(String inputUpdated, ToDoList toDoList) {
         getOutput("value").setValue(
                 (getInput("value").getValue().isTruthy())?
-                        (new NumberValue(BigDecimal.ONE)):
-                        (new NumberValue(BigDecimal.ZERO))
+                        (new NumberValue(BigDecimal.ZERO)):
+                        (new NumberValue(BigDecimal.ONE))
         );
         if (!hasNullInput()) {
             sendOutputs(toDoList);

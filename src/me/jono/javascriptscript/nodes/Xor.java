@@ -27,8 +27,8 @@ public class Xor extends Node {
     public void update(String inputUpdated, ToDoList toDoList) {
         getOutput("value").setValue(
                 xor(getInput("value0").getValue().isTruthy(), getInput("value1").getValue().isTruthy())?
-                        (new NumberValue(BigDecimal.ZERO)):
-                        (new NumberValue(BigDecimal.ONE))
+                        (new NumberValue(BigDecimal.ONE)):
+                        (new NumberValue(BigDecimal.ZERO))
         );
         if (!hasNullInput()) {
             sendOutputs(toDoList);
