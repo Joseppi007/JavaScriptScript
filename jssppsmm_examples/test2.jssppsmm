@@ -9,5 +9,5 @@ CONNECTION start_in value value1 s
 CONNECTION s value value p
 
 INPUT s value0 NUMBER:0
-INPUT s value1 MULTI:(NUMBER:1,TEXT:[example],MULTI:(NUMBER:7))
+INPUT s value1 MULTI:(NUMBER:1,TEXT:[example, example, example],MULTI:(NUMBER:7))
 OUTPUT s value NUMBER:0

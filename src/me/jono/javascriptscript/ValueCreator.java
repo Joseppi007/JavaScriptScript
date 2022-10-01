@@ -62,7 +62,7 @@ public class ValueCreator {
             return "NUMBER:"+value.toString();
         }
         if (value instanceof TextValue) {
-            return "TEXT:\""+value.toString()+"\"";
+            return "TEXT:["+value.toString()+"]";
         }
         if (value instanceof MultiValue) {
             StringBuilder ret = new StringBuilder("MULTI:(");
