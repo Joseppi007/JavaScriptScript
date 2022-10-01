@@ -1,9 +1,9 @@
 ORDERING STACK
 NUMBER_LENGTH 200 20
 
-NODE INPUT_NUMBER start_in
-NODE SUBTRACT s
-NODE PRINT p
+NODE InputNumber start_in
+NODE Subtract s
+NODE Print p
 
 CONNECTION start_in value value1 s
 CONNECTION s value value p

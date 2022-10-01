@@ -17,6 +17,7 @@ public class Test1 {
     public static void main(String[] args) {
         ProgramGraph programGraph = new ProgramGraph(new File(args[0]));
         System.out.println(ValueCreator.unmakeValue(programGraph.getNode("s").getInput("value1").getValue()));
+        System.out.println(NodeCreator.unmakeNode(programGraph.getNode("s")));
         ArrayList<String> nodesToRun = new ArrayList<>();
         for (Node node : programGraph.listNodes()) {
             if (node.getName().length() > 4 && node.getName().substring(0,5).equals("start")) {

@@ -4,6 +4,7 @@ import me.jono.javascriptscript.nodes.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -40,7 +41,8 @@ public class ProgramGraph extends Value {
                             String[] args = new String[tokens.length-1];
                             System.arraycopy(tokens, 1, args, 0, args.length);
                             addNode(NodeCreator.makeNode(args));
-                        } catch(ClassNotFoundException cnfe) {cnfe.printStackTrace();}
+                        }
+                        catch(Exception e) {e.printStackTrace();}
                     }
                     case ("CONNECTION") -> {
                         if (tokens.length > 5) {
