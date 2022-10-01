@@ -166,4 +166,25 @@ public abstract class Node {
         a.append("}");
         return a.toString();
     }
+
+    /**
+     * Returns true if any of the InputSockets have the empty MultiValue
+     * @return are any of the inputs empty MultiValues? (aka Null)
+     */
+    public boolean hasNullInput() {
+        for (InputSocket socket : getInputs().values()) {
+            if (isInputNull(socket.getName())) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the input is Null (an empty MultiValue)
+     * @param inputName the name of the InputSocket to check
+     * @return is the socket null?
+     */
+    public boolean isInputNull(String inputName) {
+        return getInput(inputName).getValue() instanceof MultiValue &&
+                ((MultiValue)getInput(inputName).getValue()).getValue().size() == 0;
+    }
 }
