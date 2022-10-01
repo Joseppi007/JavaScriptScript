@@ -18,24 +18,64 @@ public class FormatTools {
         int parentheses = 0;
         int bracket = 0;
         int curly = 0;
+        boolean escape = false;
         for (int i = 0; i < toSplit.length(); i++) {
             char c = toSplit.charAt(i);
-            switch (c) {
-                case ('(') -> {parentheses++;r.add(r.remove(r.size()-1)+c);}
-                case ('[') -> {bracket++;r.add(r.remove(r.size()-1)+c);}
-                case ('{') -> {curly++;r.add(r.remove(r.size()-1)+c);}
-                case (')') -> {parentheses--;r.add(r.remove(r.size()-1)+c);}
-                case (']') -> {bracket--;r.add(r.remove(r.size()-1)+c);}
-                case ('}') -> {curly--;r.add(r.remove(r.size()-1)+c);}
-                case (' '), ('\t') -> {
-                    if (r.get(r.size()-1).length() > 0 && parentheses < 1 && bracket < 1 && curly < 1) {
-                        r.add("");
+            if (escape) {
+                /*switch (c) {
+                    case ('n') -> {
+                        r.add(r.remove(r.size() - 1) + '\n');
                     }
-                    else if (r.get(r.size()-1).length() > 0) {
-                        r.add(r.remove(r.size()-1)+c);
+                    case ('t') -> {
+                        r.add(r.remove(r.size() - 1) + '\t');
+                    }
+                    default -> {
+                        r.add(r.remove(r.size() - 1) + c);
+                    }
+                }*/
+                r.add(r.remove(r.size() - 1) + c);
+                escape = false;
+            } else {
+                switch (c) {
+                    case ('(') -> {
+                        parentheses++;
+                        r.add(r.remove(r.size() - 1) + c);
+                    }
+                    case ('[') -> {
+                        bracket++;
+                        r.add(r.remove(r.size() - 1) + c);
+                    }
+                    case ('{') -> {
+                        curly++;
+                        r.add(r.remove(r.size() - 1) + c);
+                    }
+                    case (')') -> {
+                        parentheses--;
+                        r.add(r.remove(r.size() - 1) + c);
+                    }
+                    case (']') -> {
+                        bracket--;
+                        r.add(r.remove(r.size() - 1) + c);
+                    }
+                    case ('}') -> {
+                        curly--;
+                        r.add(r.remove(r.size() - 1) + c);
+                    }
+                    case ('\\') -> {
+                        escape = true;
+                        r.add(r.remove(r.size() - 1) + c);
+                    }
+                    case (' '), ('\t') -> {
+                        if (r.get(r.size() - 1).length() > 0 && parentheses < 1 && bracket < 1 && curly < 1) {
+                            r.add("");
+                        } else if (r.get(r.size() - 1).length() > 0) {
+                            r.add(r.remove(r.size() - 1) + c);
+                        }
+                    }
+                    default -> {
+                        r.add(r.remove(r.size() - 1) + c);
                     }
                 }
-                default -> {r.add(r.remove(r.size()-1)+c);}
             }
         }
         return r;
@@ -76,5 +116,67 @@ public class FormatTools {
             }
         }
         return r;
+    }
+
+    /**
+     * Escape things like parentheses and brackets in a String to make them more compatible with the other format tools.
+     * @param string The String to escape
+     * @return The escaped String
+     */
+    public static String customStringEscape(String string) {
+        StringBuilder r = new StringBuilder();
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+            switch (c) {
+                case ('('), ('['), ('{'), (')'), (']'), ('}'), ('\\') -> {
+                    r.append('\\');
+                    r.append(c);
+                }
+                case ('\t') -> {
+                    r.append("\\t");
+                }
+                case ('\n') -> {
+                    r.append("\\n");
+                }
+                default -> {
+                    r.append(c);
+                }
+            }
+        }
+        return r.toString();
+    }
+
+    /**
+     * Un-does the escaping done in {@link FormatTools#customStringEscape(String) customStringEscape}.
+     * @param string The String to unescape
+     * @return The unescaped String
+     */
+    public static String CustomStringUnescape(String string) {
+        StringBuilder r = new StringBuilder();
+        boolean escape = false;
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+            if (escape) {
+                switch (c) {
+                    case ('n') -> {
+                        r.append('\n');
+                    }
+                    case ('t') -> {
+                        r.append('\t');
+                    }
+                    default -> {
+                        r.append(c);
+                    }
+                }
+                escape = false;
+            } else {
+                if (c == '\\') {
+                    escape = true;
+                } else {
+                    r.append(c);
+                }
+            }
+        }
+        return r.toString();
     }
 }

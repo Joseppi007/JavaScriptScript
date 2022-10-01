@@ -36,7 +36,7 @@ public class ValueCreator {
                 return new NumberValue(new BigDecimal(data));
             }
             case ("TEXT"), ("\"") -> {
-                return new TextValue(data.substring(1,data.length()-1));
+                return new TextValue(FormatTools.CustomStringUnescape(data.substring(1,data.length()-1)));
             }
             case ("MULTI"), ("()") -> {
                 ArrayList<Value> values = new ArrayList<>();
@@ -62,7 +62,7 @@ public class ValueCreator {
             return "NUMBER:"+value.toString();
         }
         if (value instanceof TextValue) {
-            return "TEXT:["+value.toString()+"]";
+            return "TEXT:["+FormatTools.customStringEscape(value.toString())+"]";
         }
         if (value instanceof MultiValue) {
             StringBuilder ret = new StringBuilder("MULTI:(");
