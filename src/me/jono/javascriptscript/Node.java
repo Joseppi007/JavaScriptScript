@@ -69,7 +69,7 @@ public abstract class Node {
     }
 
     /**
-     * Gets the output socket with the provided name and returns null if it doesn't exist
+     * Gets the output socket with the provided name and returns a new one if it doesn't exist
      * @param name The name of the OutputSocket
      * @return The OutputSocket with the name or null
      */
@@ -77,7 +77,9 @@ public abstract class Node {
         if (outputs.containsKey(name)) {
             return outputs.get(name);
         }
-        return null;
+        OutputSocket created = new OutputSocket(this, name);
+        outputs.put(name, created);
+        return created;
     }
 
     /**

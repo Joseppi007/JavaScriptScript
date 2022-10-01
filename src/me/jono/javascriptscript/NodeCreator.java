@@ -16,7 +16,7 @@ import java.util.Scanner;
  * Creates Nodes from Strings for loading .jssppsmm files
  */
 public class NodeCreator {
-    private static final Scanner input = new Scanner(System.in);
+    public static final Scanner INPUT = new Scanner(System.in);
     private NodeCreator() {}
 
     /**
@@ -28,13 +28,6 @@ public class NodeCreator {
      */
     public static Node makeNode(String[] args)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        /*switch (args[0]) {
-            case ("+"), ("Add") -> {return new Add(args[1]);}
-            case ("-"), ("Subtract") -> {return new Subtract(args[1]);}
-            case ("InputNumber") -> {return new InputNumber(args[1], input);}
-            case ("Print") -> {return new Print(args[1]);}
-        }
-        throw new ClassNotFoundException();*/
         Class c = Class.forName("me.jono.javascriptscript.nodes."+args[0]);
         Constructor<Node>[] constructors = c.getConstructors();
         Constructor<Node> simplest = constructors[0];
@@ -49,7 +42,7 @@ public class NodeCreator {
                 p[i] = args[1];
             }
             if (param.getType().equals(Scanner.class)) {
-                p[i] = input;
+                p[i] = INPUT;
             }
         }
         Node r = simplest.newInstance(p);

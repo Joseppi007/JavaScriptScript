@@ -2,6 +2,7 @@ package me.jono.javascriptscript;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -45,6 +46,9 @@ public class ValueCreator {
                     values.add(makeValue(valueString));
                 }
                 return new MultiValue(values);
+            }
+            case ("PROGRAM"), ("{}") -> {
+                return new ProgramGraph(new File(data.substring(1,data.length()-1)));
             }
             default -> {
                 return new MultiValue();

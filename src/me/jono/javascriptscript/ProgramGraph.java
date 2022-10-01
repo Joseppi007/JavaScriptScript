@@ -15,16 +15,26 @@ public class ProgramGraph extends Value {
 
     private ToDoList toDoList;
 
+    private String source;
+
+    /**
+     * Gets where the ProgramGraph came from--"unknown source" if not from a file
+     * @return a filepath to the file where this program came form--"unknown source" if not from a file
+     */
+    public String getSource() {return source;}
+
     /**
      * Creates an empty program
      */
     public ProgramGraph(ToDoList.Ordering ordering) {
         super(new HashMap<String, Node>());
         toDoList = new ToDoList(ordering);
+        source = "unknown source";
     }
 
     public ProgramGraph(File file) {
         this(ToDoList.Ordering.STACK);
+        source = file.getPath();
         try {
             Scanner fileScanner = new Scanner(file);
             while (fileScanner.hasNext()) {
@@ -87,25 +97,6 @@ public class ProgramGraph extends Value {
         fileWriter.append('\n');
 
         for (Node node : listNodes()) {
-            for (OutputSocket socket : node.getOutputs().values()) {
-                for (Connection connection : socket.getOutgoingConnections()) {
-                    fileWriter.append("CONNECTION ");
-                    fileWriter.append(node.getName());
-                    fileWriter.append(" ");
-                    fileWriter.append(socket.getName());
-                    fileWriter.append(" ");
-                    fileWriter.append(connection.getInputSocket().getName());
-                    fileWriter.append(" ");
-                    fileWriter.append(connection.getInputSocket().getNode().getName());
-                    fileWriter.append(" "+connection.getPriority());
-                    fileWriter.append('\n');
-                }
-            }
-        }
-
-        fileWriter.append('\n');
-
-        for (Node node : listNodes()) {
             for (InputSocket socket : node.getInputs().values()) {
                 fileWriter.append("INPUT ");
                 fileWriter.append(node.getName());
@@ -125,6 +116,25 @@ public class ProgramGraph extends Value {
                 fileWriter.append(" ");
                 fileWriter.append(ValueCreator.unmakeValue(socket.getValue()));
                 fileWriter.append("\n");
+            }
+        }
+
+        fileWriter.append('\n');
+
+        for (Node node : listNodes()) {
+            for (OutputSocket socket : node.getOutputs().values()) {
+                for (Connection connection : socket.getOutgoingConnections()) {
+                    fileWriter.append("CONNECTION ");
+                    fileWriter.append(node.getName());
+                    fileWriter.append(" ");
+                    fileWriter.append(socket.getName());
+                    fileWriter.append(" ");
+                    fileWriter.append(connection.getInputSocket().getName());
+                    fileWriter.append(" ");
+                    fileWriter.append(connection.getInputSocket().getNode().getName());
+                    fileWriter.append(" "+connection.getPriority());
+                    fileWriter.append('\n');
+                }
             }
         }
 

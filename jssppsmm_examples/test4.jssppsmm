@@ -1,0 +1,15 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedInput first_name
+NODE EmbedInput last_name
+NODE TextConcat first_and_space
+NODE TextConcat everything
+NODE EmbedOutput full_name
+
+INPUT first_and_space value1 TEXT:[ ]
+
+CONNECTION first_name value value0 first_and_space
+CONNECTION first_and_space value value0 everything
+CONNECTION last_name value value1 everything
+CONNECTION everything value value full_name
