@@ -1,0 +1,17 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedInput first_name
+NODE EmbedInput last_name
+NODE Embedded test4
+NODE EmbedOutput full_name
+
+COMMENT You'll probably need to change this reference, but here's what works for me:
+INPUT test4 program PROGRAM:{C:\MyFiles\Recreational\Java\JavaScriptScript\javascriptscript\jssppsmm_examples\test4.jssppsmm}
+INPUT test4 first_name TEXT:[Joe]
+INPUT test4 last_name TEXT:[Novack]
+OUTPUT test4 full_name TEXT:[Joe Novack]
+
+CONNECTION first_name value first_name test4
+CONNECTION last_name value last_name test4
+CONNECTION test4 full_name value full_name
