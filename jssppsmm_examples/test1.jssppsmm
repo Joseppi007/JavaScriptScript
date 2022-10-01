@@ -7,8 +7,8 @@ NODE ADD a
 NODE SUBTRACT s
 NODE PRINT p
 
-CONNECTION start_in0 value value0 a
-CONNECTION start_in1 value value1 a
+CONNECTION start_in0 value value0 a 10
+CONNECTION start_in1 value value1 a 10
 CONNECTION start_in0 value value0 s
 CONNECTION start_in1 value value1 s
 CONNECTION a value value p

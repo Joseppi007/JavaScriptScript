@@ -26,7 +26,8 @@ public class ProgramGraph extends Value {
             Scanner fileScanner = new Scanner(file);
             while (fileScanner.hasNext()) {
                 String line = fileScanner.nextLine();
-                String[] tokens = line.split(" ");
+                String[] tokens = {};
+                tokens = FormatTools.separateBySpacesNotInBrackets(line).toArray(tokens);
                 switch (tokens[0]) {
                     case ("ORDERING") -> {
                         toDoList.setOrdering(ToDoList.Ordering.valueOf(tokens[1]));
@@ -47,6 +48,12 @@ public class ProgramGraph extends Value {
                         } else {
                             makeConnection(tokens[1], tokens[2], tokens[3], tokens[4]);
                         }
+                    }
+                    case ("INPUT") -> {
+                        getNode(tokens[1]).getInput(tokens[2]).setValue(ValueCreator.makeValue(tokens[3]));
+                    }
+                    case ("OUTPUT") -> {
+                        getNode(tokens[1]).getOutput(tokens[2]).setValue(ValueCreator.makeValue(tokens[3]));
                     }
                 }
             }
