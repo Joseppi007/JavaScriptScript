@@ -16,8 +16,20 @@ public class NumberValue extends Value {
     private static MathContext displayContext = new MathContext(digits, RoundingMode.HALF_UP);
 
     /**
+     * Gets the number of digits NumberValues have
+     * @return the number of digits NumberValues have
+     */
+    public static int getDigits() {return displayContext.getPrecision();}
+
+    /**
+     * Gets the number of extra digits used behind the scenes to keep errors hidden
+     * @return the number of extra digits
+     */
+    public static int getExtraDigits() {return calculationContext.getPrecision()-displayContext.getPrecision();}
+
+    /**
      * Gets the calculation MathContext
-     * @return
+     * @return the calculation MathContext
      */
     public MathContext getCalculationContext() {return calculationContext;}
 
