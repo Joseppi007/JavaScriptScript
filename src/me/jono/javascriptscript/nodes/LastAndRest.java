@@ -2,11 +2,15 @@ package me.jono.javascriptscript.nodes;
 
 import me.jono.javascriptscript.MultiValue;
 import me.jono.javascriptscript.Node;
+import me.jono.javascriptscript.NumberValue;
 import me.jono.javascriptscript.ToDoList;
+
+import java.math.BigDecimal;
 
 /**
  * @author jono
- * Splits a MultiValue into its last value and the rest of them
+ * Splits a MultiValue into its last value and the rest of them. Outputs an empty MultiValue on "done" when the value
+ * has no rest and doesn't output the lack of rest.
  */
 public class LastAndRest extends Node {
 
@@ -19,6 +23,7 @@ public class LastAndRest extends Node {
         newInput("value");
         newOutput("last");
         newOutput("rest");
+        newOutput("done", new NumberValue(BigDecimal.ONE));
     }
 
     @Override
@@ -28,6 +33,8 @@ public class LastAndRest extends Node {
             if (value.getValue().size() == 0) {
                 getOutput("last").setValue(new MultiValue());
                 getOutput("rest").setValue(new MultiValue());
+                getOutput("last").addConnectionsToToDoList(toDoList);
+                getOutput("done").addConnectionsToToDoList(toDoList);
             } else {
                 getOutput("last").setValue(value.getValue(value.getValue().size()-1));
                 MultiValue rest = new MultiValue();
@@ -35,12 +42,15 @@ public class LastAndRest extends Node {
                     rest.getValue().add(value.getValue().get(i-1));
                 }
                 getOutput("rest").setValue(rest);
+                getOutput("last").addConnectionsToToDoList(toDoList);
+                getOutput("rest").addConnectionsToToDoList(toDoList);
             }
         } else {
             getOutput("last").setValue(getInput("value").getValue());
             getOutput("rest").setValue(new MultiValue());
+            getOutput("last").addConnectionsToToDoList(toDoList);
+            getOutput("done").addConnectionsToToDoList(toDoList);
         }
-        sendOutputs(toDoList);
     }
 
 }

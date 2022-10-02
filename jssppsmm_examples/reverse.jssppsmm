@@ -1,0 +1,24 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedInput text
+NODE EmbedOutput reversed
+NODE TextToMultiOfCharacters split
+NODE MultiOfCharactersToText unsplit
+NODE LastAndRest lar
+NODE Accumulator accumulator
+NODE Buffer buffer
+
+OUTPUT text value TEXT:[Hello, World!]
+INPUT reversed value TEXT:[!dlroW ,olleH]
+
+CONNECTION text value value split
+CONNECTION split value value lar
+CONNECTION lar rest value buffer 1
+CONNECTION lar last ready buffer 0
+CONNECTION buffer value value lar 1
+CONNECTION lar last value accumulator
+CONNECTION lar done ready accumulator
+CONNECTION accumulator value value unsplit
+CONNECTION unsplit value value reversed
+CONNECTION text value empty accumulator 10

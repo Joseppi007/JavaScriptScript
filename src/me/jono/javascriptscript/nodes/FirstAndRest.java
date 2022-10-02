@@ -5,9 +5,12 @@ import me.jono.javascriptscript.Node;
 import me.jono.javascriptscript.NumberValue;
 import me.jono.javascriptscript.ToDoList;
 
+import java.math.BigDecimal;
+
 /**
  * @author jono
- * Splits a MultiValue into its first value and the rest of them
+ * Splits a MultiValue into its first value and the rest of them. Outputs an empty MultiValue on "done" when the value
+ * has no rest and doesn't output the lack of rest.
  */
 public class FirstAndRest extends Node {
 
@@ -20,6 +23,7 @@ public class FirstAndRest extends Node {
         newInput("value");
         newOutput("first");
         newOutput("rest");
+        newOutput("done", new NumberValue(BigDecimal.ONE));
     }
 
     @Override
@@ -29,6 +33,8 @@ public class FirstAndRest extends Node {
             if (value.getValue().size() == 0) {
                 getOutput("first").setValue(new MultiValue());
                 getOutput("rest").setValue(new MultiValue());
+                getOutput("first").addConnectionsToToDoList(toDoList);
+                getOutput("done").addConnectionsToToDoList(toDoList);
             } else {
                 getOutput("first").setValue(value.getValue(0));
                 MultiValue rest = new MultiValue();
@@ -36,12 +42,15 @@ public class FirstAndRest extends Node {
                     rest.getValue().add(value.getValue().get(i));
                 }
                 getOutput("rest").setValue(rest);
+                getOutput("first").addConnectionsToToDoList(toDoList);
+                getOutput("rest").addConnectionsToToDoList(toDoList);
             }
         } else {
             getOutput("first").setValue(getInput("value").getValue());
             getOutput("rest").setValue(new MultiValue());
+            getOutput("first").addConnectionsToToDoList(toDoList);
+            getOutput("done").addConnectionsToToDoList(toDoList);
         }
-        sendOutputs(toDoList);
     }
 
 }
