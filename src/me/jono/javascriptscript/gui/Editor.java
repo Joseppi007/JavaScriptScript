@@ -1,120 +1,125 @@
 package me.jono.javascriptscript.gui;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import me.jono.javascriptscript.*;
+import me.jono.javascriptscript.ProgramGraph;
+import me.jono.javascriptscript.ToDoList;
 import me.jono.javascriptscript.nodes.Embedded;
 
 import java.io.File;
-import java.util.HashMap;
+import java.io.IOException;
 
 public class Editor extends Application {
+    private Canvas canv;
+    private VBox vbox;
+    private Group root;
+    private Scene scene;
+    private MenuBar menuBar;
+    private Embedded program;
 
     public static void main(String[] args) {launch(args);}
-
     @Override
     public void start(Stage stage) throws Exception {
-        Group root = new Group();
-        stage.setTitle("JavaScriptScript++#--.jssppsmm");
-        Scene scene = new Scene(root,800, 600, Color.color(0.05, 0.1, 0.15));
+        vbox = new VBox();
+        root = new Group();
+        menuBar = new MenuBar();
+        vbox.getChildren().addAll(menuBar, root);
 
-        Text text = new Text();
-        text.setText("Right now this only runs programs... :/ Sorry");
-        text.setFill(Color.color(1, 1, 0.8));
-        text.setFont(Font.font(50));
-        text.setX(10);
-        text.setY(50);
-        root.getChildren().add(text);
+        Menu menuFile = new Menu("File");
+        Menu menuEdit = new Menu("Edit");
+        menuBar.getMenus().addAll(menuFile, menuEdit);
 
-        Text text1 = new Text();
-        text1.setText("Mind putting the path to your program in that box?");
-        text1.setFill(Color.color(1, 1, 0.8));
-        text1.setFont(Font.font(25));
-        text1.setX(10);
-        text1.setY(85);
-        root.getChildren().add(text1);
+        program = new Embedded("program");
+        program.getInput("program").setValue(new ProgramGraph(ToDoList.Ordering.STACK));
 
-        Text text2 = new Text();
-        text2.setText("Sorry that this is bad, I'm still learning JavaFX.");
-        text2.setFill(Color.color(1, 1, 0.8));
-        text2.setFont(Font.font(15));
-        text2.setX(10);
-        text2.setY(110);
-        root.getChildren().add(text2);
+        MenuItem menuNew = new MenuItem("New");
+        menuNew.setOnAction(event -> {
+            program = new Embedded("program");
+            program.getInput("program").setValue(new ProgramGraph(ToDoList.Ordering.STACK));
+        });
+        MenuItem menuOpen = new MenuItem("Open");
+        menuOpen.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open a .jssppsmm file");
+            File file = fileChooser.showOpenDialog(stage);
 
-        javafx.scene.control.TextField textField = new TextField();
-        textField.setFont(new Font(20));
-        textField.setLayoutX(10);
-        textField.setLayoutY(130);
-        textField.setOnAction(event -> {
-            File file = new File(textField.getText());
-            Group runRoot = new Group();
-            Scene runScene = new Scene(runRoot,800, 600);
-            stage.setScene(runScene);
-            Embedded program = new Embedded("program");
+            program = new Embedded("program");
             program.getInput("program").setValue(new ProgramGraph(file));
-            program.makeSockets();
-            int vertical_position = 30;
-            HashMap<String, TextField> inputTextField = new HashMap<>();
-            HashMap<String, Text> outputText = new HashMap<>();
-            for (InputSocket inputSocket : program.getInputs().values()) {
-                if (inputSocket.getName().equals("program")) {continue;}
-                Text t = new Text();
-                t.setText(inputSocket.getName());
-                t.setFont(new Font(20));
-                t.setLayoutX(10);
-                t.setLayoutY(vertical_position);
-                runRoot.getChildren().add(t);
-                vertical_position += 5;
+        });
+        MenuItem menuSave = new MenuItem("Save As");
+        menuSave.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save as a .jssppsmm file");
+            File file = fileChooser.showSaveDialog(stage);
 
-                TextField tf = new TextField();
-                tf.setText(inputSocket.getValue().toString());
-                tf.setFont(new Font(20));
-                tf.setLayoutX(10);
-                tf.setLayoutY(vertical_position);
-                tf.setOnAction(event1 -> {
-                    for (String key : inputTextField.keySet()) {
-                        program.getInput(key).setValue(new TextValue(inputTextField.get(key).getText()));
-                    }
-                    program.update("", new ToDoList(ToDoList.Ordering.STACK));
-                    for (String key : outputText.keySet()) {
-                        outputText.get(key).setText(program.getOutput(key).getValue().toString());
-                    }
-                });
-                runRoot.getChildren().add(tf);
-                vertical_position += 80;
-                inputTextField.put(inputSocket.getName(), tf);
-            }
-            vertical_position = 30;
-            for (OutputSocket outputSocket : program.getOutputs().values()) {
-                Text t = new Text();
-                t.setText(outputSocket.getName());
-                t.setFont(new Font(20));
-                t.setLayoutX(410);
-                t.setLayoutY(vertical_position);
-                runRoot.getChildren().add(t);
-                vertical_position += 30;
-
-                Text t1 = new Text();
-                t1.setText(outputSocket.getValue().toString());
-                t1.setFont(new Font(20));
-                t1.setLayoutX(420);
-                t1.setLayoutY(vertical_position);
-                runRoot.getChildren().add(t1);
-                vertical_position += 55;
-                outputText.put(outputSocket.getName(), t1);
+            try {
+                ((ProgramGraph)program.getInput("program").getValue()).writeToFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
-        root.getChildren().add(textField);
+        menuFile.getItems().addAll(menuNew, menuOpen, menuSave);
 
+        MenuItem menuPopup = new MenuItem("Create Popup");
+        menuPopup.setOnAction(event -> {
+            Stage popup = new Stage();
+            Group popupRoot = new Group();
+            Scene popupScene = new Scene(popupRoot, 800, 600, Color.color(0.05, 0.1, 0.0));
+            popup.setScene(popupScene);
+            popup.setTitle("Popup");
+            popup.show();
+        });
+        menuEdit.getItems().addAll(menuPopup);
+
+        scene = new Scene(vbox, 800, 600, Color.color(0.5, 0.1, 0.2));
         stage.setScene(scene);
+
+        canv = new Canvas(800, 600);
+        root.getChildren().add(canv);
+        paint();
+
+        scene.widthProperty().addListener((ChangeListener) (observable, oldValue, newValue) -> {paint();});
+        scene.heightProperty().addListener((ChangeListener) (observable, oldValue, newValue) -> {paint();});
+
+        stage.setTitle("JavaScriptScript++#--.jssppsmm Editor");
         stage.show();
+        paint();
     }
 
+    /**
+     * Paints on the Canvas
+     */
+    public void paint() {
+        double width = vbox.getWidth();
+        double height = vbox.getHeight()-menuBar.getHeight();
+
+        canv.setWidth(width);
+        canv.setHeight(height);
+
+        GraphicsContext ctx = canv.getGraphicsContext2D();
+        ctx.setFill(Color.color(0, 0.1, 0.2));
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.setStroke(Color.color(1, 0.9, 0.8));
+        ctx.strokeLine(0, 0, width, height);
+        ctx.strokeLine(width, 0, 0, height);
+
+        ctx.setFill(Color.color(1, 0.9, 0.8));
+        ctx.setFont(new Font(100));
+        ctx.fillText("Work in Progress", width/3, height-25, width/3);
+        ctx.fillText("This is a placeholder.", width/5, 100, 3*width/5);
+    }
 }
