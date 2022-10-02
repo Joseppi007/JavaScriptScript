@@ -1,0 +1,29 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedInput start
+NODE EmbedInput end
+NODE EmbedInput step
+NODE ToNumber #start
+NODE ToNumber #end
+NODE ToNumber #step
+NODE Add add
+NODE LessThan lt
+NODE If loop
+NODE Print print
+NODE Buffer buffer
+
+CONNECTION start value value #start
+CONNECTION end value value #end
+CONNECTION step value value #step
+CONNECTION #start value value buffer 10
+CONNECTION #start value value print 9
+CONNECTION #start value ready buffer
+CONNECTION buffer value value0 add
+CONNECTION #step value value1 add
+CONNECTION add value value buffer 9
+CONNECTION add value value print 10
+CONNECTION add value value0 lt
+CONNECTION #end value value1 lt
+CONNECTION lt value value loop
+CONNECTION loop true ready buffer

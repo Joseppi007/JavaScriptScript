@@ -1,0 +1,25 @@
+COMMENT This one doesn't work because I didn't finish it... Maybe you can give it a go if you'd like?
+
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedInput code
+NODE EmbedInput data_string
+NODE EmbedStartPoint op_index_start
+NODE TextToMultiOfCharacters data
+NODE TextToMultiOfCharacters code_ops
+NODE Print print
+NODE Buffer reset
+NODE If loop
+NODE If op_zero
+NODE If op_one
+NODE If op_semicolon
+NODE SelectRepeat op
+
+INPUT reset value MULTI:()
+OUTPUT op_index_start value NUMBER:0
+
+CONNECTION data_string value value data
+CONNECTION code value value code_ops
+CONNECTION data value value print
+CONNECTION code_ops value value print
