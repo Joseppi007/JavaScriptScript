@@ -7,7 +7,7 @@ NODE Embedded test4
 NODE EmbedOutput full_name
 
 COMMENT You'll probably need to change this reference, but here's what works for me:
-INPUT test4 program PROGRAM:{C:\MyFiles\Recreational\Java\JavaScriptScript\javascriptscript\jssppsmm_examples\test4.jssppsmm}
+INPUT test4 program PROGRAM:{C:\MyFiles\Recreational\Java\JavaScriptScript\javascriptscript\jssppsmm_examples\embedded_inside.jssppsmm}
 INPUT test4 first_name TEXT:[Joe]
 INPUT test4 last_name TEXT:[Novack]
 OUTPUT test4 full_name TEXT:[Joe Novack]

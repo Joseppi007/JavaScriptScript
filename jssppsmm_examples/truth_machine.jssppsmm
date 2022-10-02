@@ -1,0 +1,15 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedInput input
+NODE Equals equals
+NODE If if
+NODE Print print
+
+INPUT equals value1 TEXT:[1]
+
+CONNECTION input value value0 equals
+CONNECTION equals value value if
+CONNECTION if false value print
+CONNECTION if true value print 10
+CONNECTION if true value if

@@ -59,7 +59,7 @@ public class NumberValue extends Value {
 
     @Override
     public boolean isTruthy() {
-        return getValue().compareTo(BigDecimal.ZERO) < 1;
+        return getValue().compareTo(BigDecimal.ZERO) > 0;
     }
 
 }
