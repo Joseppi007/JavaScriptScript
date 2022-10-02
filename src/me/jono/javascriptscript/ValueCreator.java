@@ -40,6 +40,7 @@ public class ValueCreator {
                 return new TextValue(FormatTools.customStringUnescape(data.substring(1,data.length()-1)));
             }
             case ("MULTI"), ("()") -> {
+                if (data.length() <= 2) return new MultiValue();
                 ArrayList<Value> values = new ArrayList<>();
                 for (String valueString : FormatTools.separateByCharNotInBrackets(
                                           data.substring(1,data.length()-1), ',')) {

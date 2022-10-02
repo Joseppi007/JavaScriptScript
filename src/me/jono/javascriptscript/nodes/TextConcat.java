@@ -25,7 +25,9 @@ public class TextConcat extends Node {
         r += getInput("value0").getValue();
         r += getInput("value1").getValue();
         getOutput("value").setValue(new TextValue(r));
-        sendOutputs(toDoList);
+        if (!hasNullInput()) {
+            sendOutputs(toDoList);
+        }
     }
 
 }

@@ -1,0 +1,36 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedStartPoint start
+NODE TextConcat tc0
+NODE TextConcat tc1
+NODE TextConcat tc2
+NODE TextConcat tc3
+NODE TextConcat tc4
+NODE Subtract sub
+NODE If if
+NODE Print print
+NODE Buffer reset
+
+OUTPUT start value NUMBER:99
+INPUT tc0 value1 TEXT:[ bottles of pop on the wall,\n]
+INPUT tc2 value1 TEXT:[ bottles of pop!\nTake one down,\npass it around.\n]
+INPUT tc4 value1 TEXT:[ bottles of pop on the wall!\n\n]
+INPUT sub value1 NUMBER:1
+INPUT reset value MULTI:()
+
+CONNECTION start value value if
+CONNECTION if true ready reset 10
+CONNECTION if true value0 sub 1
+CONNECTION if true value0 tc0
+CONNECTION if true value1 tc1
+CONNECTION sub value value1 tc3 10
+CONNECTION sub value value if
+CONNECTION tc0 value value0 tc1
+CONNECTION tc1 value value0 tc2
+CONNECTION tc2 value value0 tc3
+CONNECTION tc3 value value0 tc4
+CONNECTION tc4 value value print
+CONNECTION reset value value0 tc0
+CONNECTION reset value value1 tc1
+CONNECTION reset value value1 tc3

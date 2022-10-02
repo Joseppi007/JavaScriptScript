@@ -35,6 +35,10 @@ public class Embedded extends Node {
             nodesToRunFrom.add(input.getName());
         }
 
+        for (Node node : programGraph.listNodes()) {
+            if (node instanceof EmbedStartPoint) nodesToRunFrom.add(node.getName());
+        }
+
         String[] template = {};
         programGraph.runNode(nodesToRunFrom.toArray(template));
 
