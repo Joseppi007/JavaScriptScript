@@ -45,7 +45,8 @@ public class Editor extends Application {
 
         Menu menuFile = new Menu("File");
         Menu menuEdit = new Menu("Edit");
-        menuBar.getMenus().addAll(menuFile, menuEdit);
+        Menu menuRun = new Menu("Run");
+        menuBar.getMenus().addAll(menuFile, menuEdit, menuRun);
 
         program = new Embedded("program");
         program.getInput("program").setValue(new ProgramGraph(ToDoList.Ordering.STACK));
@@ -87,14 +88,15 @@ public class Editor extends Application {
 
         MenuItem menuPopup = new MenuItem("Create Popup");
         menuPopup.setOnAction(event -> {
-            Stage popup = new Stage();
+            /*Stage popup = new Stage();
             Group popupRoot = new Group();
             Scene popupScene = new Scene(popupRoot, 800, 800, Color.color(0.05, 0.1, 0.0));
             popup.setScene(popupScene);
             popup.setTitle("Popup");
-            popup.show();
+            popup.show();*/
+            Runner runner = new Runner(program);
         });
-        menuEdit.getItems().addAll(menuPopup);
+        menuRun.getItems().addAll(menuPopup);
 
         scene = new Scene(vbox, 800, 800, Color.color(0.5, 0.1, 0.2));
         stage.setScene(scene);
