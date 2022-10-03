@@ -274,7 +274,7 @@ public abstract class Node {
         double width = ctx.getCanvas().getWidth();
         double height = ctx.getCanvas().getHeight();
 
-        double verticalSpacing = rectangle.getHeightPixels(camera) / getOutputs().size();
+        double verticalSpacing = rectangle.getHeightPixels(camera) * height / getOutputs().size();
         double x = ( rectangle.getXPixels(camera) + rectangle.getWidthPixels(camera) ) * width;
         double y = rectangle.getYPixels(camera) * height + verticalSpacing / 2;
 
@@ -283,7 +283,6 @@ public abstract class Node {
         ctx.setStroke(Color.color(1, 1, 1, 0.5));
         ctx.setFill(Color.color(1, 1, 1));
         for (OutputSocket outputSocket : getOutputs().values()) {
-            y += verticalSpacing;
             for (Connection connection : outputSocket.getOutgoingConnections()) {
                 ctx.setLineWidth(connection.getPriority());
                 Rectangle other = connection.getEnd().getRectangle();
@@ -297,6 +296,7 @@ public abstract class Node {
                                         connection.getEnd().getInputs().size() + 0.5) * height
                 );
             }
+            y += verticalSpacing;
         }
 
     }
