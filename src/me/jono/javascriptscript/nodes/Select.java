@@ -4,7 +4,8 @@ import me.jono.javascriptscript.*;
 
 /**
  * @author jono
- * Selects one of the Values in a MultiValue at the index
+ * Selects one of the Values in a MultiValue at the index.
+ * Also works with characters in TextValues.
  */
 public class Select extends Node {
 
@@ -25,6 +26,13 @@ public class Select extends Node {
             int index = ((NumberValue)getInput("index").getValue()).getValue().intValue();
             if (getInput("value").getValue() instanceof MultiValue) {
                 getOutput("value").setValue(((MultiValue)getInput("value").getValue()).getValue(index));
+            } else if (getInput("value").getValue() instanceof TextValue) {
+                try {
+                    String text = ((TextValue) getInput("value").getValue()).getValue();
+                    getOutput("value").setValue(new TextValue(text.substring(index, index+1)));
+                } catch (IndexOutOfBoundsException ioobe) {
+                    getOutput("value").setValue(new MultiValue());
+                }
             } else {
                 if (index == 1) {
                     getOutput("value").setValue(getInput("value").getValue());

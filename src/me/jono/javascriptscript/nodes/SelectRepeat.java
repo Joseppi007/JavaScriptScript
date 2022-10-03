@@ -1,13 +1,11 @@
 package me.jono.javascriptscript.nodes;
 
-import me.jono.javascriptscript.MultiValue;
-import me.jono.javascriptscript.Node;
-import me.jono.javascriptscript.NumberValue;
-import me.jono.javascriptscript.ToDoList;
+import me.jono.javascriptscript.*;
 
 /**
  * @author jono
- * Selects one of the Values in a MultiValue at the index, looping back to the start once the index goes too high
+ * Selects one of the Values in a MultiValue at the index, looping back to the start once the index goes too high.
+ * Also works with characters in TextValues.
  */
 public class SelectRepeat extends Node {
 
@@ -35,6 +33,19 @@ public class SelectRepeat extends Node {
                 index = index % multiValue.getValue().size();
 
                 getOutput("value").setValue(multiValue.getValue(index));
+            } else if (getInput("value").getValue() instanceof TextValue) {
+                try {
+                    String text = ((TextValue) getInput("value").getValue()).getValue();
+
+                    // Left and Right rap-around
+                    index = index % text.length();
+                    index = index + text.length();
+                    index = index % text.length();
+
+                    getOutput("value").setValue(new TextValue(text.substring(index, index+1)));
+                } catch (IndexOutOfBoundsException ioobe) {
+                    getOutput("value").setValue(new MultiValue());
+                }
             } else {
                 getOutput("value").setValue(getInput("value").getValue());
             }

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  * @author jono
  * The Identity Node takes in a value and spits it back out.
  * You can use it as a constant.
+ * If you make this Node's rectangle have 0 width and 0 height, it helps you organise connections.
  */
 public class Identity extends Node {
     /**

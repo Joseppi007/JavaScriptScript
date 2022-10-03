@@ -59,4 +59,9 @@ public class MultiValue extends Value implements Iterable<Value> {
         }
         return new MultiValue();
     }
+
+    @Override
+    public boolean isNull() {
+        return getValue().size() == 0;
+    }
 }

@@ -40,4 +40,11 @@ public abstract class Value {
      */
     public abstract boolean isTruthy();
 
+    /**
+     * Returns true if this is an empty MultiValue, and false otherwise
+     * @return is this the empty MultiValue?
+     */
+    public boolean isNull() {
+        return false;
+    }
 }

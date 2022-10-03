@@ -24,15 +24,10 @@ public class Group extends Node {
     @Override
     public void update(String inputUpdated, ToDoList toDoList) {
         MultiValue multiValue = new MultiValue();
-        int numbersPutTogether = 0;
-        for (InputSocket input : getInputs().values()) {
-            if (input.getValue() instanceof NumberValue) {
-                multiValue.getValue().add(input.getValue());
-                numbersPutTogether++;
-            }
-        }
+        multiValue.getValue().add(getInput("value0").getValue());
+        multiValue.getValue().add(getInput("value1").getValue());
         getOutput("value").setValue(multiValue);
-        if (numbersPutTogether == getInputs().size()) {
+        if (!(getInput("value0").getValue().isNull() || getInput("value0").getValue().isNull())) {
             sendOutputs(toDoList);
         }
     }
