@@ -2,13 +2,11 @@ package me.jono.javascriptscript;
 
 import javafx.scene.paint.Color;
 import me.jono.javascriptscript.gui.Rectangle;
-import me.jono.javascriptscript.nodes.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -102,7 +100,7 @@ public class ProgramGraph extends Value {
         file.createNewFile();
         FileWriter fileWriter = new FileWriter(file);
 
-        fileWriter.write("ORDERING " + ((toDoList.getOrdering().equals(ToDoList.Ordering.QUE)) ? ("QUE") : ("STACK")) +
+        fileWriter.write("ORDERING " + ((toDoList.getOrdering().equals(ToDoList.Ordering.QUEUE)) ? ("QUE") : ("STACK")) +
                 "\n");
         fileWriter.append("NUMBER_LENGTH " + NumberValue.getDigits() + " " + NumberValue.getExtraDigits() + "\n\n");
 

@@ -67,7 +67,7 @@ public class OutputSocket extends Socket {
 
         if (toDoList.getOrdering() == ToDoList.Ordering.STACK) {
             toDoList.getConnections().addAll(sortedForHighPriorityThenOriginalOrder);
-        } else if (toDoList.getOrdering() == ToDoList.Ordering.QUE) {
+        } else if (toDoList.getOrdering() == ToDoList.Ordering.QUEUE) {
             // Add in reversed order
             for (int index = sortedForHighPriorityThenOriginalOrder.size()-1; index >= 0; index--) {
                 toDoList.getConnections().add(sortedForHighPriorityThenOriginalOrder.get(index));

@@ -11,7 +11,7 @@ public class ToDoList {
     private final ArrayList<Connection> connections;
     public enum Ordering{
         STACK,
-        QUE
+        QUEUE
     }
     private Ordering ordering;
 
@@ -66,7 +66,7 @@ public class ToDoList {
      * @return the next connection
      */
     private Connection next() {
-        if (ordering == Ordering.QUE) {
+        if (ordering == Ordering.QUEUE) {
             return connections.remove(0);
         }
         return connections.remove(connections.size()-1);
