@@ -14,10 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import me.jono.javascriptscript.InputSocket;
-import me.jono.javascriptscript.OutputSocket;
-import me.jono.javascriptscript.ProgramGraph;
-import me.jono.javascriptscript.ToDoList;
+import me.jono.javascriptscript.*;
 import me.jono.javascriptscript.nodes.Embedded;
 
 import java.io.File;
@@ -34,10 +31,13 @@ public class Editor extends Application {
     private Scene scene;
     private MenuBar menuBar;
     private Embedded program;
+    private Camera camera;
 
     public static void main(String[] args) {launch(args);}
     @Override
     public void start(Stage stage) throws Exception {
+        camera = new Camera();
+
         vbox = new VBox();
         root = new Group();
         menuBar = new MenuBar();
@@ -87,7 +87,7 @@ public class Editor extends Application {
         menuPopup.setOnAction(event -> {
             Stage popup = new Stage();
             Group popupRoot = new Group();
-            Scene popupScene = new Scene(popupRoot, 800, 600, Color.color(0.05, 0.1, 0.0));
+            Scene popupScene = new Scene(popupRoot, 800, 800, Color.color(0.05, 0.1, 0.0));
             popup.setScene(popupScene);
             popup.setTitle("Popup");
             popup.show();
@@ -123,7 +123,7 @@ public class Editor extends Application {
         ctx.setFill(Color.color(0, 0.1, 0.2));
         ctx.fillRect(0, 0, width, height);
 
-        ctx.setStroke(Color.color(1, 0.9, 0.8));
+        /*ctx.setStroke(Color.color(1, 0.9, 0.8));
         ctx.strokeLine(width*0.45, 0, width*0.55, height);
         ctx.strokeLine(width*0.55, 0, width*0.45, height);
 
@@ -142,6 +142,13 @@ public class Editor extends Application {
         for (OutputSocket outputSocket : program.getOutputs().values()) {
             a += h;
             ctx.fillText(outputSocket.getName()+": "+outputSocket.getValue(), width/2, a, width/2-10);
+        }*/
+
+        for (Node node : ((ProgramGraph)program.getInput("program").getValue()).listNodes()) {
+            node.paint(ctx, camera);
+        }
+        for (Node node : ((ProgramGraph)program.getInput("program").getValue()).listNodes()) {
+            node.paintConnections(ctx, camera);
         }
     }
 }

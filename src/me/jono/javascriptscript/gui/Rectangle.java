@@ -1,5 +1,6 @@
 package me.jono.javascriptscript.gui;
 
+import javafx.scene.canvas.GraphicsContext;
 import org.w3c.dom.css.Rect;
 
 /**
@@ -46,14 +47,14 @@ public class Rectangle {
      * @param camera the camera to use to map to screen cords
      * @return the x coordinate
      */
-    public double getXPixels(Camera camera) {return x*camera.getScale()+camera.getX();}
+    public double getXPixels(Camera camera) {return (x-camera.getX())*camera.getScale();}
 
     /**
      * Gets the y part of the position for pixels
      * @param camera the camera to use to map to screen cords
      * @return the y coordinate
      */
-    public double getYPixels(Camera camera) {return y*camera.getScale()+camera.getY();}
+    public double getYPixels(Camera camera) {return (y-camera.getY())*camera.getScale();}
 
     /**
      * Gets the width for pixels
@@ -98,14 +99,14 @@ public class Rectangle {
      * @param x the new x before mapping
      * @param camera the camera to use to map from screen cords
      */
-    public void setXPixels(double x, Camera camera) {this.x = (x - camera.getX()) / camera.getScale();}
+    public void setXPixels(double x, Camera camera) {this.x = (x + camera.getX()) / camera.getScale();}
 
     /**
      * Sets the y from pixels
      * @param y the new y before mapping
      * @param camera the camera to use to map from screen cords
      */
-    public void setYPixels(double y, Camera camera) {this.y = (y - camera.getY()) / camera.getScale();}
+    public void setYPixels(double y, Camera camera) {this.y = (y + camera.getY()) / camera.getScale();}
 
     /**
      * Sets the width from pixels
@@ -129,5 +130,22 @@ public class Rectangle {
     @Override
     public String toString() {
         return "Rectangle{x: "+getX()+",y: "+getY()+",width: "+getWidth()+",height: "+getHeight()+"}";
+    }
+
+    /**
+     * Paints the Rectangle to the GraphicsContext with the provided camera
+     * @param ctx the GraphicsContext to paint with
+     * @param camera the camera to look through
+     */
+    public void paint(GraphicsContext ctx, Camera camera) {
+        double width = ctx.getCanvas().getWidth();
+        double height = ctx.getCanvas().getHeight();
+
+        ctx.fillRect(
+                getXPixels(camera)*width,
+                getYPixels(camera)*height,
+                getWidthPixels(camera)*width,
+                getHeightPixels(camera)*height
+        );
     }
 }

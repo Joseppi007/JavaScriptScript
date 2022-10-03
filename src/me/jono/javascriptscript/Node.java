@@ -1,5 +1,13 @@
 package me.jono.javascriptscript;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+import me.jono.javascriptscript.gui.Camera;
+import me.jono.javascriptscript.gui.Rectangle;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -17,6 +25,8 @@ public abstract class Node {
     private HashMap<String, InputSocket> inputs;
     private HashMap<String, OutputSocket> outputs;
     private String name; // Must be UNIQUE
+    private Rectangle rectangle;
+    private Color color;
 
     /**
      * Creates a new Node
@@ -26,6 +36,8 @@ public abstract class Node {
         this.name = name;
         inputs = new HashMap<>();
         outputs = new HashMap<>();
+        rectangle = new Rectangle(-0.5, -0.5, 1, 1);
+        color = Color.color(0.8, 0.75, 1);
     }
 
     /**
@@ -41,6 +53,18 @@ public abstract class Node {
     public HashMap<String, OutputSocket> getOutputs() {return outputs;}
 
     /**
+     * Gets the rectangle that the Node is graphically
+     * @return the rectangle
+     */
+    public Rectangle getRectangle() {return rectangle;}
+
+    /**
+     * Gets the color that the Node is graphically
+     * @return the color
+     */
+    public Color getColor() {return color;}
+
+    /**
      * Returns the name of the Node.
      * @return the name
      */
@@ -51,6 +75,18 @@ public abstract class Node {
      * @param name the new name
      */
     public void setName(String name) {this.name = name;}
+
+    /**
+     * Sets the rectangle to a new rectangle
+     * @param rectangle the new rectangle
+     */
+    public void setRectangle(Rectangle rectangle) {this.rectangle = rectangle;}
+
+    /**
+     * Sets the color to a new color
+     * @param color the new color
+     */
+    public void setColor(Color color) {this.color = color;}
 
     /**
      * Gets the input socket with the provided name and creates one if one doesn't exist already. I allow creating new
@@ -150,26 +186,6 @@ public abstract class Node {
     }
 
     /**
-     * Returns a string representation of the object.
-     * @return a string representation of the object.
-     */
-    public String toDetailedString() {
-        StringBuilder a = new StringBuilder(toString());
-        a.append("{");
-        for (InputSocket input : inputs.values()) {
-            a.append(input).append(",");
-        }
-        a.delete(a.length()-1, a.length());
-        a.append("}{");
-        for (OutputSocket output : outputs.values()) {
-            a.append(output).append(",");
-        }
-        a.delete(a.length()-1, a.length());
-        a.append("}");
-        return a.toString();
-    }
-
-    /**
      * Returns true if any of the InputSockets have the empty MultiValue
      * @return are any of the inputs empty MultiValues? (aka Null)
      */
@@ -189,4 +205,116 @@ public abstract class Node {
         return getInput(inputName).getValue() instanceof MultiValue &&
                 ((MultiValue)getInput(inputName).getValue()).getValue().size() == 0;
     }
+
+    /**
+     * Paints the Node and its sockets using {@link GraphicsContext ctx}
+     * @param ctx A {@link GraphicsContext GraphicsContext} to paint with
+     * @param camera Where we're looking
+     */
+    public void paint(GraphicsContext ctx, Camera camera) {
+        double width = ctx.getCanvas().getWidth();
+        double height = ctx.getCanvas().getHeight();
+
+        // The rectangle part
+        ctx.setStroke(Color.WHITE);
+        ctx.setFill(color);
+        rectangle.paint(ctx, camera);
+
+        // The center text part
+        if (color.getBrightness() < 0.5) {
+            ctx.setStroke(Color.BLACK);
+            ctx.setFill(Color.WHITE);
+        } else {
+            ctx.setStroke(Color.WHITE);
+            ctx.setFill(Color.BLACK);
+        }
+        ctx.setFont(new Font(rectangle.getHeightPixels(camera)*height/3));
+        ctx.setTextAlign(TextAlignment.CENTER);
+        ctx.fillText(
+                this.getClass().getSimpleName(),
+                (rectangle.getXPixels(camera)+rectangle.getWidthPixels(camera)/2) * width,
+                (rectangle.getYPixels(camera)+rectangle.getHeightPixels(camera)*2/3) * height,
+                rectangle.getWidthPixels(camera) * width
+        );
+
+        // InputSockets
+        double verticalSpacing = rectangle.getHeightPixels(camera) * height / getInputs().size();
+        double x = rectangle.getXPixels(camera) * width;
+        double y = rectangle.getYPixels(camera) * height + verticalSpacing / 2;
+        ctx.setFont(new Font(verticalSpacing));
+        ctx.setTextAlign(TextAlignment.RIGHT);
+        ctx.setStroke(Color.color(1, 1, 1, 0.5));
+        ctx.setFill(Color.color(1, 1, 1));
+        for (InputSocket inputSocket : getInputs().values()) {
+            ctx.fillOval(x - 5, y - 5, 10, 10);
+            ctx.strokeOval(x - 5, y - 5, 10, 10);
+            y += verticalSpacing;
+        }
+
+        // OutputSockets
+        verticalSpacing = rectangle.getHeightPixels(camera) * height / getOutputs().size();
+        x = ( rectangle.getXPixels(camera) + rectangle.getWidthPixels(camera) ) * width;
+        y = rectangle.getYPixels(camera) * height + verticalSpacing / 2;
+        ctx.setFont(new Font(verticalSpacing));
+        ctx.setTextAlign(TextAlignment.RIGHT);
+        for (OutputSocket outputSocket : getOutputs().values()) {
+            ctx.fillOval(x - 5, y - 5, 10, 10);
+            ctx.strokeOval(x - 5, y - 5, 10, 10);
+            y += verticalSpacing;
+        }
+
+    }
+
+    /**
+     * Paints the connections. This is separate so that layering can be done better.
+     * @param ctx A {@link GraphicsContext GraphicsContext} to paint with
+     * @param camera Where we're looking
+     */
+    public void paintConnections(GraphicsContext ctx, Camera camera) {
+        double width = ctx.getCanvas().getWidth();
+        double height = ctx.getCanvas().getHeight();
+
+        double verticalSpacing = rectangle.getHeightPixels(camera) / getOutputs().size();
+        double x = ( rectangle.getXPixels(camera) + rectangle.getWidthPixels(camera) ) * width;
+        double y = rectangle.getYPixels(camera) * height + verticalSpacing / 2;
+
+        System.out.println("("+x+", "+y+")");
+
+        ctx.setStroke(Color.color(1, 1, 1, 0.5));
+        ctx.setFill(Color.color(1, 1, 1));
+        for (OutputSocket outputSocket : getOutputs().values()) {
+            y += verticalSpacing;
+            for (Connection connection : outputSocket.getOutgoingConnections()) {
+                ctx.setLineWidth(connection.getPriority());
+                Rectangle other = connection.getEnd().getRectangle();
+                ctx.strokeLine(
+                        x,
+                        y,
+                        other.getXPixels(camera) * width,
+                        other.getYPixels(camera) * height +
+                                other.getHeightPixels(camera) *
+                                        (connection.getEnd().getInputsList().indexOf(connection.getInputSocket()) /
+                                        connection.getEnd().getInputs().size() + 0.5) * height
+                );
+            }
+        }
+
+    }
+
+    /**
+     * Gets the input sockets as an array list
+     * @return the inputs
+     */
+    public ArrayList<InputSocket> getInputsList() {
+        return new ArrayList<>(getInputs().values());
+    }
+
+    /**
+     * Gets the output sockets as an array list
+     * @return the outputs
+     */
+    public ArrayList<OutputSocket> getOutputsList() {
+        return new ArrayList<>(getOutputs().values());
+    }
+
 }
