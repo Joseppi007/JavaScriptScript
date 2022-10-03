@@ -1,0 +1,27 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedInput a
+NODE EmbedInput b
+NODE EmbedInput c
+NODE TextConcat tc1
+NODE TextConcat tc2
+NODE EmbedOutput abc
+
+CONNECTION a value value0 tc1
+CONNECTION b value value1 tc1
+CONNECTION tc1 value value0 tc2
+CONNECTION c value value1 tc2
+CONNECTION tc2 value value abc
+
+POSITION a -3.1 -1.5 1 1
+POSITION b -3.1 -0.5 1 1
+POSITION c -3.1 0.5 1 1
+POSITION tc1 -1.8 -1 1 1
+POSITION tc2 -0.6 0 1 1
+POSITION abc 0.6 -0.5 1 1
+
+COLOR a 1 0.75 0.75
+COLOR b 0.75 1 0.75
+COLOR c 0.75 0.75 1
+COLOR abc 0.75 0.75 0.75

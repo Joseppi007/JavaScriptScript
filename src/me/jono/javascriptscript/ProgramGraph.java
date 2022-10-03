@@ -1,5 +1,7 @@
 package me.jono.javascriptscript;
 
+import javafx.scene.paint.Color;
+import me.jono.javascriptscript.gui.Rectangle;
 import me.jono.javascriptscript.nodes.*;
 
 import java.io.File;
@@ -68,6 +70,22 @@ public class ProgramGraph extends Value {
                     }
                     case ("OUTPUT") -> {
                         getNode(tokens[1]).getOutput(tokens[2]).setValue(ValueCreator.makeValue(tokens[3]));
+                    }
+                    case ("POSITION") -> {
+                        getNode(tokens[1]).setRectangle(new Rectangle(
+                                Double.parseDouble(tokens[2]),
+                                Double.parseDouble(tokens[3]),
+                                (tokens.length>4)?Double.parseDouble(tokens[4]):1.0,
+                                (tokens.length>5)?Double.parseDouble(tokens[5]):1.0
+                        ));
+                    }
+                    case ("COLOR") -> {
+                        getNode(tokens[1]).setColor(Color.color(
+                                Double.parseDouble(tokens[2]),
+                                Double.parseDouble(tokens[3]),
+                                Double.parseDouble(tokens[4]),
+                                (tokens.length>5)?Double.parseDouble(tokens[5]):1.0
+                        ));
                     }
                 }
             }

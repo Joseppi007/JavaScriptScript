@@ -292,8 +292,8 @@ public abstract class Node {
                         other.getXPixels(camera) * width,
                         other.getYPixels(camera) * height +
                                 other.getHeightPixels(camera) *
-                                        (connection.getEnd().getInputsList().indexOf(connection.getInputSocket()) /
-                                        connection.getEnd().getInputs().size() + 0.5) * height
+                                        ((connection.getEnd().getInputsList().indexOf(connection.getInputSocket())+0.5)/
+                                        connection.getEnd().getInputs().size()) * height
                 );
             }
             y += verticalSpacing;
