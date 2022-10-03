@@ -14,6 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import me.jono.javascriptscript.InputSocket;
+import me.jono.javascriptscript.OutputSocket;
 import me.jono.javascriptscript.ProgramGraph;
 import me.jono.javascriptscript.ToDoList;
 import me.jono.javascriptscript.nodes.Embedded;
@@ -21,6 +23,10 @@ import me.jono.javascriptscript.nodes.Embedded;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * @author jono
+ * The GUI for JavaScriptScript++#--.jssppsmm
+ */
 public class Editor extends Application {
     private Canvas canv;
     private VBox vbox;
@@ -48,6 +54,7 @@ public class Editor extends Application {
         menuNew.setOnAction(event -> {
             program = new Embedded("program");
             program.getInput("program").setValue(new ProgramGraph(ToDoList.Ordering.STACK));
+            program.makeSockets();
         });
         MenuItem menuOpen = new MenuItem("Open");
         menuOpen.setOnAction(event -> {
@@ -57,6 +64,9 @@ public class Editor extends Application {
 
             program = new Embedded("program");
             program.getInput("program").setValue(new ProgramGraph(file));
+            program.makeSockets();
+
+            paint();
         });
         MenuItem menuSave = new MenuItem("Save As");
         menuSave.setOnAction(event -> {
@@ -114,12 +124,24 @@ public class Editor extends Application {
         ctx.fillRect(0, 0, width, height);
 
         ctx.setStroke(Color.color(1, 0.9, 0.8));
-        ctx.strokeLine(0, 0, width, height);
-        ctx.strokeLine(width, 0, 0, height);
+        ctx.strokeLine(width*0.45, 0, width*0.55, height);
+        ctx.strokeLine(width*0.55, 0, width*0.45, height);
 
         ctx.setFill(Color.color(1, 0.9, 0.8));
-        ctx.setFont(new Font(100));
-        ctx.fillText("Work in Progress", width/3, height-25, width/3);
-        ctx.fillText("This is a placeholder.", width/5, 100, 3*width/5);
+        double a = 0;
+        double h = height/(program.getInputs().size()-1);
+        ctx.setFont(new Font(h));
+        for (InputSocket inputSocket : program.getInputs().values()) {
+            if (inputSocket.getName().equals("program")) continue;
+            a += h;
+            ctx.fillText(inputSocket.getName()+": "+inputSocket.getValue(), 10, a, width/2-10);
+        }
+        a = 0;
+        h = height/(program.getInputs().size()-1);
+        ctx.setFont(new Font(h));
+        for (OutputSocket outputSocket : program.getOutputs().values()) {
+            a += h;
+            ctx.fillText(outputSocket.getName()+": "+outputSocket.getValue(), width/2, a, width/2-10);
+        }
     }
 }

@@ -16,6 +16,11 @@ import me.jono.javascriptscript.nodes.Embedded;
 import java.io.File;
 import java.util.HashMap;
 
+/**
+ * @author jono
+ * The first crack at the GUI.
+ * This may be deleted later.
+ */
 public class Runner extends Application {
 
     public static void main(String[] args) {launch(args);}
