@@ -228,13 +228,21 @@ public abstract class Node {
             ctx.setStroke(Color.WHITE);
             ctx.setFill(Color.BLACK);
         }
-        ctx.setFont(new Font(rectangle.getHeightPixels(camera)*height/3));
+        ctx.setFont(new Font(Math.min(rectangle.getHeightPixels(camera)*height/3, 24)));
+        double upshift = -0.5*((rectangle.getHeightPixels(camera)*height/3)-
+                Math.min(rectangle.getHeightPixels(camera)*height/3, 24));
         ctx.setTextAlign(TextAlignment.CENTER);
         ctx.fillText(
                 this.getClass().getSimpleName(),
                 (rectangle.getXPixels(camera)+rectangle.getWidthPixels(camera)/2) * width,
-                (rectangle.getYPixels(camera)+rectangle.getHeightPixels(camera)*2/3) * height,
-                rectangle.getWidthPixels(camera) * width
+                (rectangle.getYPixels(camera)+rectangle.getHeightPixels(camera)/3) * height + upshift,
+                rectangle.getWidthPixels(camera) * width - 10
+        );
+        ctx.fillText(
+                getName(),
+                (rectangle.getXPixels(camera)+rectangle.getWidthPixels(camera)/2) * width,
+                (rectangle.getYPixels(camera)+rectangle.getHeightPixels(camera)) * height + upshift,
+                rectangle.getWidthPixels(camera) * width - 10
         );
 
         // InputSockets
@@ -277,8 +285,6 @@ public abstract class Node {
         double verticalSpacing = rectangle.getHeightPixels(camera) * height / getOutputs().size();
         double x = ( rectangle.getXPixels(camera) + rectangle.getWidthPixels(camera) ) * width;
         double y = rectangle.getYPixels(camera) * height + verticalSpacing / 2;
-
-        System.out.println("("+x+", "+y+")");
 
         ctx.setStroke(Color.color(1, 1, 1, 0.5));
         ctx.setFill(Color.color(1, 1, 1));

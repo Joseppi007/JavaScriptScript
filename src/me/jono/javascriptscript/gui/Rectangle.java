@@ -129,7 +129,7 @@ public class Rectangle {
 
     @Override
     public String toString() {
-        return "Rectangle{x: "+getX()+",y: "+getY()+",width: "+getWidth()+",height: "+getHeight()+"}";
+        return +getX()+" "+getY()+" "+getWidth()+" "+getHeight();
     }
 
     /**

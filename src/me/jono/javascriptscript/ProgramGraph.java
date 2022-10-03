@@ -156,6 +156,28 @@ public class ProgramGraph extends Value {
             }
         }
 
+        fileWriter.append('\n');
+
+        for (Node node : listNodes()) {
+            fileWriter.append("POSITION ");
+            fileWriter.append(node.getName());
+            fileWriter.append(" ");
+            fileWriter.append(node.getRectangle().toString());
+            fileWriter.append('\n');
+        }
+
+        fileWriter.append('\n');
+
+        for (Node node : listNodes()) {
+            fileWriter.append("COLOR ");
+            fileWriter.append(node.getName());
+            fileWriter.append(" "+node.getColor().getRed());
+            fileWriter.append(" "+node.getColor().getGreen());
+            fileWriter.append(" "+node.getColor().getBlue());
+            fileWriter.append(" "+node.getColor().getOpacity());
+            fileWriter.append('\n');
+        }
+
         fileWriter.close();
     }
 

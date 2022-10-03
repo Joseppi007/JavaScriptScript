@@ -36,7 +36,7 @@ public class Editor extends Application {
     public static void main(String[] args) {launch(args);}
     @Override
     public void start(Stage stage) throws Exception {
-        camera = new Camera();
+        camera = new Camera(-5, -5, 0.1);
 
         vbox = new VBox();
         root = new Group();
@@ -55,6 +55,8 @@ public class Editor extends Application {
             program = new Embedded("program");
             program.getInput("program").setValue(new ProgramGraph(ToDoList.Ordering.STACK));
             program.makeSockets();
+
+            paint();
         });
         MenuItem menuOpen = new MenuItem("Open");
         menuOpen.setOnAction(event -> {
@@ -94,7 +96,7 @@ public class Editor extends Application {
         });
         menuEdit.getItems().addAll(menuPopup);
 
-        scene = new Scene(vbox, 800, 600, Color.color(0.5, 0.1, 0.2));
+        scene = new Scene(vbox, 800, 800, Color.color(0.5, 0.1, 0.2));
         stage.setScene(scene);
 
         canv = new Canvas(800, 600);

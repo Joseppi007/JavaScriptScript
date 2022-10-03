@@ -1,0 +1,32 @@
+ORDERING STACK
+NUMBER_LENGTH 50 20
+
+NODE EmbedInput in
+NODE Identity i0
+NODE Identity i1
+NODE Identity i2
+NODE Identity i3
+NODE Identity i4
+NODE Identity i5
+NODE EmbedOutput out
+
+CONNECTION in value value i0
+CONNECTION i0 value value i1
+CONNECTION i1 value value i2
+CONNECTION i2 value value i3
+CONNECTION i3 value value out
+CONNECTION i0 value value i4
+CONNECTION i4 value value i5
+CONNECTION i5 value value i3
+
+POSITION in -5 -1 1 2
+POSITION out 4 -1 1 2
+POSITION i0 -3 0 0 0
+POSITION i1 -3 -2 0 0
+POSITION i2 3 -2 0 0
+POSITION i3 3 0 0 0
+POSITION i4 -3 2 0 0
+POSITION i5 3 2 0 0
+
+COLOR in 1 1 1
+COLOR out 0 0 0
