@@ -1,6 +1,5 @@
 package me.jono.javascriptscript.gui;
 
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -13,6 +12,9 @@ import me.jono.javascriptscript.OutputSocket;
 import me.jono.javascriptscript.TextValue;
 import me.jono.javascriptscript.ToDoList;
 import me.jono.javascriptscript.nodes.Embedded;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author jono
@@ -35,60 +37,53 @@ public class Runner extends Stage {
         this.setScene(scene);
         this.setTitle("Jossum"); // Jos Opossum
 
-        /*
+        ArrayList<javafx.scene.Node> inputs = new ArrayList<>();
+        ArrayList<javafx.scene.Node> outputs = new ArrayList<>();
+        HashMap<String, TextField> inputTextFields = new HashMap<>();
+        HashMap<String, Text> outputTexts = new HashMap<>();
 
         for (InputSocket inputSocket : program.getInputs().values()) {
             if (inputSocket.getName().equals("program")) {continue;}
             Text t = new Text();
             t.setText(inputSocket.getName());
-            t.setFont(new Font(20));
-            t.setLayoutX(10);
-            t.setLayoutY(vertical_position);
-            runRoot.getChildren().add(t);
-            vertical_position += 5;
+            t.setFont(new Font(18));
+            inputs.add(t);
 
             TextField tf = new TextField();
             tf.setText(inputSocket.getValue().toString());
-            tf.setFont(new Font(20));
-            tf.setLayoutX(10);
-            tf.setLayoutY(vertical_position);
-            tf.setOnAction(event1 -> {
-                for (String key : inputTextField.keySet()) {
-                    program.getInput(key).setValue(new TextValue(inputTextField.get(key).getText()));
+            tf.setFont(new Font(18));
+            inputs.add(tf);
+            inputTextFields.put(inputSocket.getName(), tf);
+            tf.setOnAction(event -> {
+                for (String key : inputTextFields.keySet()) {
+                    program.getInput(key).setValue(new TextValue(inputTextFields.get(key).getText()));
                 }
                 program.update("", new ToDoList(ToDoList.Ordering.STACK));
-                for (String key : outputText.keySet()) {
-                    outputText.get(key).setText(program.getOutput(key).getValue().toString());
+                for (String key : outputTexts.keySet()) {
+                    outputTexts.get(key).setText(program.getOutput(key).getValue().toString());
                 }
             });
-            runRoot.getChildren().add(tf);
-            vertical_position += 80;
-            inputTextField.put(inputSocket.getName(), tf);
         }
-        vertical_position = 30;
+
         for (OutputSocket outputSocket : program.getOutputs().values()) {
             Text t = new Text();
             t.setText(outputSocket.getName());
-            t.setFont(new Font(20));
-            t.setLayoutX(410);
-            t.setLayoutY(vertical_position);
-            runRoot.getChildren().add(t);
-            vertical_position += 30;
+            t.setFont(new Font(18));
+            outputs.add(t);
 
             Text t1 = new Text();
             t1.setText(outputSocket.getValue().toString());
-            t1.setFont(new Font(20));
-            t1.setLayoutX(420);
-            t1.setLayoutY(vertical_position);
-            runRoot.getChildren().add(t1);
-            vertical_position += 55;
-            outputText.put(outputSocket.getName(), t1);
+            t1.setFont(new Font(18));
+            outputs.add(t1);
+            outputTexts.put(outputSocket.getName(), t1);
         }
-         */
+
+        javafx.scene.Node[] template = {};
 
         Text inputText = new Text("Inputs");
         inputText.setFont(new Font(24));
         root.addColumn(0, inputText);
+        root.addColumn(0, inputs.toArray(template));
 
         Text paddingText = new Text("\t");
         paddingText.setFont(new Font(24));
@@ -97,6 +92,7 @@ public class Runner extends Stage {
         Text outputText = new Text("Outputs");
         outputText.setFont(new Font(24));
         root.addColumn(2, outputText);
+        root.addColumn(2, outputs.toArray(template));
 
         this.show();
     }
