@@ -1,0 +1,42 @@
+COMMENT TEXT:[https://www.youtube.com/watch?v=Uv6iK2kS3qQ]
+COMMENT TEXT:[I was watching this video and had to crunch some numbers.]
+
+ORDERING STACK
+NUMBER_LENGTH 1000 20
+
+NODE EmbedInput money_per_month
+NODE EmbedInput hours_per_week
+NODE Divide d0
+NODE Divide d1
+NODE Multiply m
+NODE EmbedOutput money_per_hour
+
+NODE ToNumber #money_per_month
+NODE ToNumber #hours_per_week
+CONNECTION money_per_month value value #money_per_month
+CONNECTION hours_per_week value value #hours_per_week
+
+CONNECTION #money_per_month value value0 d0
+CONNECTION d0 value value0 d1
+CONNECTION #hours_per_week value value1 d1
+CONNECTION d1 value value0 m
+CONNECTION m value value money_per_hour
+
+INPUT d0 value1 NUMBER:30
+INPUT m value1 NUMBER:7
+OUTPUT money_per_month value NUMBER:1500
+OUTPUT hours_per_week value NUMBER:75
+INPUT money_per_hour value TEXT:[4.6669 Nice ;)]
+
+POSITION money_per_month -5 -2
+POSITION hours_per_week -5 0
+POSITION #money_per_month -3.5 -2
+POSITION #hours_per_week -3.5 0
+POSITION d0 -2 -2.266666666666666
+POSITION d1 -0.5 -0.233333333333333
+POSITION m 1 -0.5
+POSITION money_per_hour 2.5 -0.5
+
+COLOR money_per_month 1 0.75 0.75
+COLOR hours_per_week 1 0.75 0.75
+COLOR money_per_hour 1 0.8 0.75
