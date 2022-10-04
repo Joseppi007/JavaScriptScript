@@ -16,7 +16,15 @@ COLOR node r g b a
 NUMBER:0.0
 TEXT:[Hello, World!]
 MULTI:(NUMBER:42,TEXT:[You can put brackets in text by escaping: \[\]])
-PROGRAM:{path/to/your/program}
+PROGRAM_LINK:{path/to/your/program}
+-----
+PROGRAM_CODE:{
+ORDERING ...
+NUMBER_LENGTH ...
+
+NODE ...
+...
+}
 =====
 
 ## Each Node's input sockets and output sockets (comprehensive docs for functionality will be elsewhere.)
