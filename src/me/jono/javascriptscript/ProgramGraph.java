@@ -23,6 +23,8 @@ public class ProgramGraph extends Value {
      */
     public String getSource() {return source;}
 
+    public boolean isFromFile() {return !(getSource().equals("unknown source"));}
+
     /**
      * Creates an empty program
      */
@@ -37,58 +39,72 @@ public class ProgramGraph extends Value {
         source = file.getPath();
         try {
             Scanner fileScanner = new Scanner(file);
-            while (fileScanner.hasNext()) {
-                String line = fileScanner.nextLine();
-                String[] tokens = {};
-                tokens = FormatTools.separateBySpacesNotInBrackets(line).toArray(tokens);
-                switch (tokens[0]) {
-                    case ("ORDERING") -> {
-                        toDoList.setOrdering(ToDoList.Ordering.valueOf(tokens[1]));
-                    }
-                    case ("NUMBER_LENGTH") -> {
-                        NumberValue.updateContexts(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
-                    }
-                    case ("NODE") -> {
-                        try {
-                            String[] args = new String[tokens.length-1];
-                            System.arraycopy(tokens, 1, args, 0, args.length);
-                            addNode(NodeCreator.makeNode(args));
-                        }
-                        catch(Exception e) {e.printStackTrace();}
-                    }
-                    case ("CONNECTION") -> {
-                        if (tokens.length > 5) {
-                            makeConnection(tokens[1], tokens[2], tokens[3], tokens[4], Integer.parseInt(tokens[5]));
-                        } else {
-                            makeConnection(tokens[1], tokens[2], tokens[3], tokens[4]);
-                        }
-                    }
-                    case ("INPUT") -> {
-                        getNode(tokens[1]).getInput(tokens[2]).setValue(ValueCreator.makeValue(tokens[3]));
-                    }
-                    case ("OUTPUT") -> {
-                        getNode(tokens[1]).getOutput(tokens[2]).setValue(ValueCreator.makeValue(tokens[3]));
-                    }
-                    case ("POSITION") -> {
-                        getNode(tokens[1]).setRectangle(new Rectangle(
-                                Double.parseDouble(tokens[2]),
-                                Double.parseDouble(tokens[3]),
-                                (tokens.length>4)?Double.parseDouble(tokens[4]):1.0,
-                                (tokens.length>5)?Double.parseDouble(tokens[5]):1.0
-                        ));
-                    }
-                    case ("COLOR") -> {
-                        getNode(tokens[1]).setColor(Color.color(
-                                Double.parseDouble(tokens[2]),
-                                Double.parseDouble(tokens[3]),
-                                Double.parseDouble(tokens[4]),
-                                (tokens.length>5)?Double.parseDouble(tokens[5]):1.0
-                        ));
-                    }
-                }
-            }
+            creation(fileScanner);
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
+        }
+    }
+
+    public ProgramGraph(String string) {
+        this(ToDoList.Ordering.STACK);
+        Scanner fileScanner = new Scanner(string);
+        creation(fileScanner);
+    }
+
+    /**
+     * Some re-used constructor code
+     * @param fileScanner the scanner
+     */
+    private void creation(Scanner fileScanner) {
+        while (fileScanner.hasNext()) {
+            String line = fileScanner.nextLine();
+            String[] tokens = {};
+            tokens = FormatTools.separateBySpacesNotInBrackets(line).toArray(tokens);
+            switch (tokens[0]) {
+                case ("ORDERING") -> {
+                    toDoList.setOrdering(ToDoList.Ordering.valueOf(tokens[1]));
+                }
+                case ("NUMBER_LENGTH") -> {
+                    NumberValue.updateContexts(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+                }
+                case ("NODE") -> {
+                    try {
+                        String[] args = new String[tokens.length-1];
+                        System.arraycopy(tokens, 1, args, 0, args.length);
+                        addNode(NodeCreator.makeNode(args));
+                    }
+                    catch(Exception e) {e.printStackTrace();}
+                }
+                case ("CONNECTION") -> {
+                    if (tokens.length > 5) {
+                        makeConnection(tokens[1], tokens[2], tokens[3], tokens[4], Integer.parseInt(tokens[5]));
+                    } else {
+                        makeConnection(tokens[1], tokens[2], tokens[3], tokens[4]);
+                    }
+                }
+                case ("INPUT") -> {
+                    getNode(tokens[1]).getInput(tokens[2]).setValue(ValueCreator.makeValue(tokens[3]));
+                }
+                case ("OUTPUT") -> {
+                    getNode(tokens[1]).getOutput(tokens[2]).setValue(ValueCreator.makeValue(tokens[3]));
+                }
+                case ("POSITION") -> {
+                    getNode(tokens[1]).setRectangle(new Rectangle(
+                            Double.parseDouble(tokens[2]),
+                            Double.parseDouble(tokens[3]),
+                            (tokens.length>4)?Double.parseDouble(tokens[4]):1.0,
+                            (tokens.length>5)?Double.parseDouble(tokens[5]):1.0
+                    ));
+                }
+                case ("COLOR") -> {
+                    getNode(tokens[1]).setColor(Color.color(
+                            Double.parseDouble(tokens[2]),
+                            Double.parseDouble(tokens[3]),
+                            Double.parseDouble(tokens[4]),
+                            (tokens.length>5)?Double.parseDouble(tokens[5]):1.0
+                    ));
+                }
+            }
         }
     }
 
@@ -99,84 +115,94 @@ public class ProgramGraph extends Value {
     public void writeToFile(File file) throws IOException {
         file.createNewFile();
         FileWriter fileWriter = new FileWriter(file);
+        fileWriter.write(codeToString());
+        fileWriter.close();
+    }
 
-        fileWriter.write("ORDERING " + ((toDoList.getOrdering().equals(ToDoList.Ordering.QUEUE)) ? ("QUE") : ("STACK")) +
+    /**
+     * Returns a string representation of the program, and not the link
+     * @return a string representation of the program
+     */
+    public String codeToString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("ORDERING " + ((toDoList.getOrdering().equals(ToDoList.Ordering.QUEUE)) ? ("QUE") : ("STACK")) +
                 "\n");
-        fileWriter.append("NUMBER_LENGTH " + NumberValue.getDigits() + " " + NumberValue.getExtraDigits() + "\n\n");
+        stringBuilder.append("NUMBER_LENGTH " + NumberValue.getDigits() + " " + NumberValue.getExtraDigits() + "\n\n");
 
         for (Node node : listNodes()) {
-            fileWriter.append("NODE ");
-            fileWriter.append(NodeCreator.unmakeNode(node));
-            fileWriter.append('\n');
+            stringBuilder.append("NODE ");
+            stringBuilder.append(NodeCreator.unmakeNode(node));
+            stringBuilder.append('\n');
         }
 
-        fileWriter.append('\n');
+        stringBuilder.append('\n');
 
         for (Node node : listNodes()) {
             for (InputSocket socket : node.getInputs().values()) {
-                fileWriter.append("INPUT ");
-                fileWriter.append(node.getName());
-                fileWriter.append(" ");
-                fileWriter.append(socket.getName());
-                fileWriter.append(" ");
-                fileWriter.append(ValueCreator.unmakeValue(socket.getValue()));
-                fileWriter.append("\n");
+                stringBuilder.append("INPUT ");
+                stringBuilder.append(node.getName());
+                stringBuilder.append(" ");
+                stringBuilder.append(socket.getName());
+                stringBuilder.append(" ");
+                stringBuilder.append(ValueCreator.unmakeValue(socket.getValue()));
+                stringBuilder.append("\n");
             }
         }
         for (Node node : listNodes()) {
             for (OutputSocket socket : node.getOutputs().values()) {
-                fileWriter.append("OUTPUT ");
-                fileWriter.append(node.getName());
-                fileWriter.append(" ");
-                fileWriter.append(socket.getName());
-                fileWriter.append(" ");
-                fileWriter.append(ValueCreator.unmakeValue(socket.getValue()));
-                fileWriter.append("\n");
+                stringBuilder.append("OUTPUT ");
+                stringBuilder.append(node.getName());
+                stringBuilder.append(" ");
+                stringBuilder.append(socket.getName());
+                stringBuilder.append(" ");
+                stringBuilder.append(ValueCreator.unmakeValue(socket.getValue()));
+                stringBuilder.append("\n");
             }
         }
 
-        fileWriter.append('\n');
+        stringBuilder.append('\n');
 
         for (Node node : listNodes()) {
             for (OutputSocket socket : node.getOutputs().values()) {
                 for (Connection connection : socket.getOutgoingConnections()) {
-                    fileWriter.append("CONNECTION ");
-                    fileWriter.append(node.getName());
-                    fileWriter.append(" ");
-                    fileWriter.append(socket.getName());
-                    fileWriter.append(" ");
-                    fileWriter.append(connection.getInputSocket().getName());
-                    fileWriter.append(" ");
-                    fileWriter.append(connection.getInputSocket().getNode().getName());
-                    fileWriter.append(" "+connection.getPriority());
-                    fileWriter.append('\n');
+                    stringBuilder.append("CONNECTION ");
+                    stringBuilder.append(node.getName());
+                    stringBuilder.append(" ");
+                    stringBuilder.append(socket.getName());
+                    stringBuilder.append(" ");
+                    stringBuilder.append(connection.getInputSocket().getName());
+                    stringBuilder.append(" ");
+                    stringBuilder.append(connection.getInputSocket().getNode().getName());
+                    stringBuilder.append(" "+connection.getPriority());
+                    stringBuilder.append('\n');
                 }
             }
         }
 
-        fileWriter.append('\n');
+        stringBuilder.append('\n');
 
         for (Node node : listNodes()) {
-            fileWriter.append("POSITION ");
-            fileWriter.append(node.getName());
-            fileWriter.append(" ");
-            fileWriter.append(node.getRectangle().toString());
-            fileWriter.append('\n');
+            stringBuilder.append("POSITION ");
+            stringBuilder.append(node.getName());
+            stringBuilder.append(" ");
+            stringBuilder.append(node.getRectangle().toString());
+            stringBuilder.append('\n');
         }
 
-        fileWriter.append('\n');
+        stringBuilder.append('\n');
 
         for (Node node : listNodes()) {
-            fileWriter.append("COLOR ");
-            fileWriter.append(node.getName());
-            fileWriter.append(" "+node.getColor().getRed());
-            fileWriter.append(" "+node.getColor().getGreen());
-            fileWriter.append(" "+node.getColor().getBlue());
-            fileWriter.append(" "+node.getColor().getOpacity());
-            fileWriter.append('\n');
+            stringBuilder.append("COLOR ");
+            stringBuilder.append(node.getName());
+            stringBuilder.append(" "+node.getColor().getRed());
+            stringBuilder.append(" "+node.getColor().getGreen());
+            stringBuilder.append(" "+node.getColor().getBlue());
+            stringBuilder.append(" "+node.getColor().getOpacity());
+            stringBuilder.append('\n');
         }
 
-        fileWriter.close();
+        return stringBuilder.toString();
     }
 
     @Override
@@ -314,6 +340,15 @@ public class ProgramGraph extends Value {
     @Override
     public boolean isTruthy() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        if (isFromFile()) {
+            return getSource();
+        } else {
+            return codeToString();
+        }
     }
 
 }

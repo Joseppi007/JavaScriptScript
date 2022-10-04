@@ -48,8 +48,11 @@ public class ValueCreator {
                 }
                 return new MultiValue(values);
             }
-            case ("PROGRAM"), ("{}") -> {
+            case ("PROGRAM"), ("PROGRAM_LINK") -> { // Backwards Compatibility ("PROGRAM")
                 return new ProgramGraph(new File(data.substring(1,data.length()-1)));
+            }
+            case ("PROGRAM_CODE"), ("{}") -> {
+                return new ProgramGraph(data.substring(1,data.length()-1));
             }
             default -> {
                 return new MultiValue();
@@ -79,6 +82,13 @@ public class ValueCreator {
                 ret = ret.delete(ret.length()-1, ret.length());
             ret.append(")");
             return ret.toString();
+        }
+        if (value instanceof ProgramGraph) {
+            if (((ProgramGraph)value).isFromFile()) {
+                return "PROGRAM_LINK:{" + value + "}";
+            } else {
+                return "PROGRAM_CODE:{\n" + value + "}";
+            }
         }
         return "UNKNOWN:?";
     }

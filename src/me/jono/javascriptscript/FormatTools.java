@@ -132,12 +132,6 @@ public class FormatTools {
                     r.append('\\');
                     r.append(c);
                 }
-                case ('\t') -> {
-                    r.append("\\t");
-                }
-                case ('\n') -> {
-                    r.append("\\n");
-                }
                 default -> {
                     r.append(c);
                 }
@@ -157,17 +151,7 @@ public class FormatTools {
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
             if (escape) {
-                switch (c) {
-                    case ('n') -> {
-                        r.append('\n');
-                    }
-                    case ('t') -> {
-                        r.append('\t');
-                    }
-                    default -> {
-                        r.append(c);
-                    }
-                }
+                r.append(c);
                 escape = false;
             } else {
                 if (c == '\\') {
