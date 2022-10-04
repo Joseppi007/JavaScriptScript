@@ -34,7 +34,7 @@ public class Select extends Node {
                     getOutput("value").setValue(new MultiValue());
                 }
             } else {
-                if (index == 1) {
+                if (index == 0) {
                     getOutput("value").setValue(getInput("value").getValue());
                 } else {
                     getOutput("value").setValue(new MultiValue());
