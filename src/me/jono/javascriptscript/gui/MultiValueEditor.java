@@ -48,6 +48,9 @@ public class MultiValueEditor extends ValueEditorBody {
         scrollPane = new ScrollPane();
         root.addRow(5, scrollPane);
         listViewAdd = new Button("Add Value");
+        listViewAdd.setOnAction(event -> {
+            socketsForValues.add(new InputSocket(socket.getNode(), socket.getName(), new MultiValue()));
+        });
         scrollPane.setContent(listViewAdd);
 
 
@@ -80,10 +83,11 @@ public class MultiValueEditor extends ValueEditorBody {
 
             button = new Button(socket.getValue().toString());
             button.setOnAction(event -> {
-
+                socketsForValues.remove(socket);
             });
             listViewDelete.getItems().add(button);
         }
-        //listViewEdit.refresh();
+        listViewEdit.refresh();
+        listViewDelete.refresh();
     }
 }
