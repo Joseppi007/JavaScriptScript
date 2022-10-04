@@ -47,17 +47,17 @@ public class ProgramGraph extends Value {
 
     public ProgramGraph(String string) {
         this(ToDoList.Ordering.STACK);
-        Scanner fileScanner = new Scanner(string);
-        creation(fileScanner);
+        Scanner scanner = new Scanner(string);
+        creation(scanner);
     }
 
     /**
      * Some re-used constructor code
-     * @param fileScanner the scanner
+     * @param scanner the scanner
      */
-    private void creation(Scanner fileScanner) {
-        while (fileScanner.hasNext()) {
-            String line = fileScanner.nextLine();
+    private void creation(Scanner scanner) {
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
             String[] tokens = {};
             tokens = FormatTools.separateBySpacesNotInBrackets(line).toArray(tokens);
             switch (tokens[0]) {
