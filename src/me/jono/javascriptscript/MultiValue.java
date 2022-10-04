@@ -64,4 +64,7 @@ public class MultiValue extends Value implements Iterable<Value> {
     public boolean isNull() {
         return getValue().size() == 0;
     }
+
+    @Override
+    public String toString() {return ValueCreator.valueToString(this);}
 }

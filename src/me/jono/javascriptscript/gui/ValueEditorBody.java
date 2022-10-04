@@ -1,8 +1,6 @@
 package me.jono.javascriptscript.gui;
 
-import me.jono.javascriptscript.MultiValue;
 import me.jono.javascriptscript.Socket;
-import me.jono.javascriptscript.TextValue;
 import me.jono.javascriptscript.Value;
 
 /**

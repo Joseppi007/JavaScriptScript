@@ -79,7 +79,7 @@ public class ValueCreator {
                 ret.append(',');
             }
             if (((MultiValue) value).getValue().size() > 0)
-                ret = ret.delete(ret.length()-1, ret.length());
+                ret.delete(ret.length()-1, ret.length());
             ret.append(")");
             return ret.toString();
         }
@@ -91,5 +91,37 @@ public class ValueCreator {
             }
         }
         return "UNKNOWN:?";
+    }
+
+    /**
+     * Makes a string representation of a Value loosely based off {@link ValueCreator#unmakeValue(Value) unmakeValue},
+     * but simplified. Especially for ProgramGraphs.
+     * @param value The value to make a String representation of
+     * @return a string representation
+     */
+    public static String valueToString(Value value) {
+        if (value instanceof NumberValue) {
+            return value.toString();
+        }
+        if (value instanceof TextValue) {
+            return "\""+FormatTools.customStringEscape(value.toString())+"\"";
+        }
+        if (value instanceof MultiValue) {
+            if (((MultiValue) value).getValue().size() == 0) {
+                return "()";
+            }
+            StringBuilder ret = new StringBuilder("(");
+            for (Value v : ((MultiValue) value).getValue()) {
+                ret.append(valueToString(v));
+                ret.append(", ");
+            }
+            ret.delete(ret.length() - 1, ret.length());
+            ret.append(")");
+            return ret.toString();
+        }
+        if (value instanceof ProgramGraph) {
+            return "{PROGRAM}";
+        }
+        return value.toString();
     }
 }

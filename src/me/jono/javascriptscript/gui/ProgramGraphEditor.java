@@ -1,7 +1,6 @@
 package me.jono.javascriptscript.gui;
 
 import me.jono.javascriptscript.Socket;
-import me.jono.javascriptscript.Value;
 
 public class ProgramGraphEditor extends ValueEditorBody {
     /**

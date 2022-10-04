@@ -21,7 +21,7 @@ public class ValueEditor extends Stage {
 
         VBox vbox = new VBox();
 
-        Scene scene = new Scene(vbox, 800, 600);
+        Scene scene = new Scene(vbox, 600, 600);
         setScene(scene);
 
         ValueEditorBody body;
@@ -41,6 +41,8 @@ public class ValueEditor extends Stage {
         updateMenuItem.setOnAction(event -> {
             body.updateValue();
         });
+        editMenu.getItems().addAll(updateMenuItem);
+        menuBar.getMenus().addAll(editMenu);
 
         vbox.getChildren().addAll(menuBar, body);
     }
